@@ -58,43 +58,78 @@ class Mechanism:
         T = sp.eye(4)  #Matrix 4x4 identity
         for i in range(self.n_joints):
             Ti = self.dh_matrix(i, apply_errors)
-            T = T * Ti
+            """
+            #Validating the matrix:
+            print(f"\nMatrix {i}:\n", Tiself.evaluate_param(Ti))
+            """
+            if(i==0):T=Ti
+            else:
+                T = T * Ti
+                """
+                #Validating the matrix:
+                print(f"\nMatrix_multplied {i}:\n", self.evaluate_param(T))
+                """
         position = T[:3, 3]
         return T, position
     
     def evaluate_param(self, T, variable_values=None, apply_errors=False):
         """Evaluate the position of the effector using params from self.param and optional variable values."""
+        
         #Build a dictionary with the parameters
         subs_dict = {}
         for i, params in enumerate(self.param):
-            subs_dict[self.a[i]] = params['a']
-            subs_dict[self.alpha[i]] = params['alpha']
-            subs_dict[self.d[i]] = params['d']
-            #For prismatic joints, theta is fixed
-            if params['type'] == 'prismatic':
-                subs_dict[self.theta[i]] = params.get('theta_offset', 0)
-            #Add errors if apply_errors is True
-            if apply_errors:
-                subs_dict[self.phi[i]] = params['errors']['phi']
-                subs_dict[self.epsilon[i]] = params['errors']['epsilon']
-                subs_dict[self.sigma[i]] = params['errors']['sigma']
-                subs_dict[self.beta[i]] = params['errors']['beta']
+            
+            #Only substitute parameters if they exist in params
+            if 'a' in params:
+                subs_dict[self.a[i]] = params['a']
+            if 'alpha' in params:
+                subs_dict[self.alpha[i]] = params['alpha']
+            if 'd' in params:
+                subs_dict[self.d[i]] = params['d']
+            
+            #Handle theta based on joint type
+            if params.get('type') == 'prismatic':
+                if 'theta_offset' in params:
+                    subs_dict[self.theta[i]] = params['theta_offset']
+            else:  # revolute or cylindrical
+                if 'theta' in params:
+                    subs_dict[self.theta[i]] = params['theta']
+            
+            #Add errors if apply_errors is True, only if they exist
+            if apply_errors and 'errors' in params:
+                errors = params['errors']
+                if 'phi' in errors:
+                    subs_dict[self.phi[i]] = errors['phi']
+                if 'epsilon' in errors:
+                    subs_dict[self.epsilon[i]] = errors['epsilon']
+                if 'sigma' in errors:
+                    subs_dict[self.sigma[i]] = errors['sigma']
+                if 'beta' in errors:
+                    subs_dict[self.beta[i]] = errors['beta']
             else:
-                subs_dict[self.phi[i]] = 0
-                subs_dict[self.epsilon[i]] = 0
-                subs_dict[self.sigma[i]] = 0
-                subs_dict[self.beta[i]] = 0
+                
+                #If no errors are applied, explicitly set error terms to 0 only if not already in subs_dict
+                if self.phi[i] not in subs_dict:
+                    subs_dict[self.phi[i]] = 0
+                if self.epsilon[i] not in subs_dict:
+                    subs_dict[self.epsilon[i]] = 0
+                if self.sigma[i] not in subs_dict:
+                    subs_dict[self.sigma[i]] = 0
+                if self.beta[i] not in subs_dict:
+                    subs_dict[self.beta[i]] = 0
         
-        #Add variable values
+        #Add variable values if provided
         if variable_values:
             subs_dict.update(variable_values)
 
+        #Substitute only the provided values, leaving missing ones as symbols
         T_numerica = T.subs(subs_dict)
         return T_numerica, T_numerica[:3, 3]
     
     def get_joint_positions(self, variable_values, apply_errors=False):
         """Return the joint positions for the mechanism in 3D."""
-        positions = [[0, 0, 0]]  # Origem
+        
+        positions = [[0, 0, 0]] #Origin
         T = sp.eye(4)
         for i in range(self.n_joints):
             T = T * self.dh_matrix(i, apply_errors)
@@ -105,10 +140,12 @@ class Mechanism:
     
     def plot_mechanism(self, variable_values=None):
         """Plot the mechanism in 3D."""
-        #Evaluate the joint positions
-        joints_no_error = self.get_joint_positions(variable_values, apply_errors=False)
-        joints_with_error = self.get_joint_positions(variable_values, apply_errors=True)
-
+        try:
+            #Evaluate the joint positions
+            joints_no_error = self.get_joint_positions(variable_values, apply_errors=False)
+            joints_with_error = self.get_joint_positions(variable_values, apply_errors=True)
+        except TypeError as e:
+            raise TypeError("could not convert values") from e
         #Create the figure
         fig = plt.figure(figsize=(12, 5))
         
