@@ -159,3 +159,5 @@ class Mechanism:
         ax.set_title('Mechanism kinematics with and without errors')
         ax.legend()
         plt.show()
+
+#Validate complete
