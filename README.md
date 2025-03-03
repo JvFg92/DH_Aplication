@@ -58,8 +58,9 @@ Essa matriz apresenta os termos trigonométricos expandidos, mas é matematicame
 
 ## **Antropomorphic Arm**
 
-![image](https://link.springer.com/book/10.1007/978-1-84628-642-1)
+![image](https://github.com/user-attachments/assets/fb2276c0-c112-48a9-955f-f4f296786b1b)
 
 
-### [Referência usada / Reference used](https://ieeexplore.ieee.org/abstract/document/5306934)
+
+### [Referência usada / Reference used](https://link.springer.com/book/10.1007/978-1-84628-642-1)
 
