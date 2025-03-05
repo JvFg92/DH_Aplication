@@ -7,7 +7,7 @@ class Mechanism:
     def __init__(self, param):
         self.param = param
         self.n_joints = len(param)
-        print("Joint Numbers:", self.n_joints)
+        #print("Joint Numbers:", self.n_joints) #Debugging
 
         #Defining symbols for DH:
         self.theta = []
@@ -151,8 +151,8 @@ class Mechanism:
         
         #Mechanism plot
         ax = fig.add_subplot(111, projection='3d')
-        ax.plot(joints_no_error[:, 0], joints_no_error[:, 1], joints_no_error[:, 2], 'b-o', label='Sem erros')
-        ax.plot(joints_with_error[:, 0], joints_with_error[:, 1], joints_with_error[:, 2], 'r--o', label='Com erros')
+        ax.plot(joints_no_error[:, 0], joints_no_error[:, 1], joints_no_error[:, 2], 'b-o', label='Without errors')
+        ax.plot(joints_with_error[:, 0], joints_with_error[:, 1], joints_with_error[:, 2], 'r--o', label='With errors')
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')

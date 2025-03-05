@@ -1,9 +1,18 @@
 # Desenvolvimento do método Denavit-Hartenberg em Python, em um projeto de análise dimensional e de erros em robôs manipuladores!
 
-Funções desenvolvidas:
-- Cálculo da cinemática direta (com e sem erros de geometria aplicados às juntas) algebricamente e numericamente
-- Plotagem gráfica do mecanismo após movimentação das juntas
-- Testes disponíveis no arquivo main.py
+Desenvolvimento:
+- DH.py:
+  - Cálculo da cinemática direta (com e sem erros de geometria aplicados às juntas) algebricamente e numericamente;
+  - Plotagem gráfica do mecanismo após movimentação das juntas;
+
+- Method_validate.py:
+  - Arquivo contendo a validação do método, descrita em sequência;
+
+- main.py:
+  - Arquivo contendo validação secundária com um braço esférico;
+
+- test.py:
+  - Arquivo contendo o a utilização do método em um elo modelo para pesquisa.
 
 O desenvolvimento do método foi validado utilizando um braço antropomórfico com 3 juntas cilíndricas (Imagem 1 - Braço Antropomórfico), onde a cinemática direta coincidiu com o esperado na bibliografia (Resultados)!
 
@@ -12,11 +21,20 @@ O desenvolvimento do método foi validado utilizando um braço antropomórfico c
 ### **PT/EN:** 
 # Development of the Denavit-Hartenberg method in Python, in a project of dimensional and error analysis in manipulator robots!
 
-Functions developed:
-- Calculation of direct kinematics (with and without geometry errors applied to the joints) algebraically and numerically
-- Graphical plotting of the mechanism after joint movement
-- Tests available in the main.py file
+Development:
+- DH.py:
+  - Calculation of direct kinematics (with and without geometry errors applied to the joints) algebraically and numerically;
+  - Graphical plotting of the mechanism after joint movement;
 
+- Method_validate.py:
+  - File containing the validation of the method, described in sequence;
+
+- main.py:
+  - File containing secondary validation with a spherical arm;
+
+- test.py:
+  - File containing the use of the method in a model link for research.
+ 
 The development of the method was validated using an anthropomorphic arm with 3 cylindrical joints (Image 1 - Anthropomorphic Arm), where the direct kinematics coincided with what was expected in the bibliography (Results)!
 
 *Note: Future tests will be performed in the test.py file.
