@@ -86,7 +86,7 @@ Essa matriz apresenta os termos trigonométricos expandidos, mas é matematicame
   = \( a_1cos(\theta_0)cos(\theta_1) + a_2cos(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)  
   = \( a_1cos(\theta_0)cos(\theta_1) + a_2cos(\theta_0)cos(\theta_1 + \theta_2) \)
 
-- **t'(1,0):** \(-sin(\theta_0)sin(\theta_1)sin(\theta_2) + sin(\theta_0)cos(\theta_1)cos(\theta_2)\)  
+- **T'(1,0):** \(-sin(\theta_0)sin(\theta_1)sin(\theta_2) + sin(\theta_0)cos(\theta_1)cos(\theta_2)\)  
   = \( sin(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)  
   = \( sin(\theta_0)cos(\theta_1 + \theta_2) \)
 
