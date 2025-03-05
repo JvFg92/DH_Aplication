@@ -40,6 +40,12 @@ The development of the method was validated using an anthropomorphic arm with 3 
 *Note: Future tests will be performed in the test.py file.
 
 
+## **Antropomorphic Arm**
+
+![image](https://github.com/user-attachments/assets/fb2276c0-c112-48a9-955f-f4f296786b1b)
+
+
+
 ## *Resultados / Results:
 
 **Bibliografia / bibliography:**
@@ -109,9 +115,6 @@ Essa matriz apresenta os termos trigonométricos expandidos, mas é matematicame
   = \( a_1sin(\theta_1) + a_2 [sin(\theta_1)cos(\theta_2) + cos(\theta_1)sin(\theta_2)] \)  
   = \( a_1sin(\theta_1) + a_2sin(\theta_1 + \theta_2) \)
 
-## **Antropomorphic Arm**
-
-![image](https://github.com/user-attachments/assets/fb2276c0-c112-48a9-955f-f4f296786b1b)
 
 ## **Trajetória calculada / *Calculated trajectory*:**
 
