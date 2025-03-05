@@ -138,7 +138,7 @@ class Mechanism:
             positions.append(pos_num)
         return np.array(positions)
     
-    def plot_mechanism(self, variable_values=None):
+    def plot_mechanism(self, variable_values=None, title=None):
         """Plot the mechanism in 3D."""
         try:
             #Evaluate the joint positions
@@ -156,7 +156,7 @@ class Mechanism:
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
-        ax.set_title('Mechanism kinematics with and without errors')
+        ax.set_title(title)
         ax.legend()
         plt.show()
 

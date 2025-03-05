@@ -92,5 +92,5 @@ if __name__ == "__main__":
     print("\n \n", error)
         
     #Plot the robot:
-    robot.plot_mechanism(variable_values)
+    robot.plot_mechanism(variable_values, title ='Mechanism kinematics with and without errors')
     
