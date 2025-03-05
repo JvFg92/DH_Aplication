@@ -57,7 +57,6 @@ if __name__ == "__main__":
     
 
     """Start calculations numerically with optional variable values ​​(graphical example):"""
-
     
     #Evaluate the position of the effector using optional variable values:
     """To plot the robot, we need to provide the values of the variables. including other parameters that are not 'theta' or 'd'"""
