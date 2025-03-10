@@ -3,9 +3,9 @@ import DH
 
 if __name__ == "__main__":
     
-    #Define the DH parameters:(exempli gratia: Anthropomorphic Arm)
+    #Define the DH parameters:(mm)
     study_case = [
-        {'type': 'revolute', 'a': 0, 'alpha': sp.pi/2, 'd': 0.0,
+        {'type': 'revolute', 'a': 80, 'alpha': 0, 'd': 0,
          'errors': {'phi': 0.05, 'epsilon': 0.02, 'sigma': 0.01, 'beta': 0.03}},
 
         {'type': 'revolute', 'alpha': 0, 'd': 0, 
