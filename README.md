@@ -3,6 +3,7 @@
 Desenvolvimento:
 - DH.py:
   - Cálculo da cinemática direta (com e sem erros de geometria aplicados às juntas) algebricamente e numericamente;
+  - Cálculo de erro de trajetória;
   - Plotagem gráfica do mecanismo após movimentação das juntas;
 
 - Method_validate.py:
@@ -24,6 +25,7 @@ O desenvolvimento do método foi validado utilizando um braço antropomórfico c
 Development:
 - DH.py:
   - Calculation of direct kinematics (with and without geometry errors applied to the joints) algebraically and numerically;
+  - Trajectory error calculation;
   - Graphical plotting of the mechanism after joint movement;
 
 - Method_validate.py:
@@ -119,8 +121,7 @@ Essa matriz apresenta os termos trigonométricos expandidos, mas é matematicame
 
 ## **Trajetória calculada / *Calculated trajectory*:**
 
-![image](https://github.com/user-attachments/assets/b30c4a6f-b0bd-4a3a-b591-6b1ac08d5baf)
-
+![image](https://github.com/user-attachments/assets/fc90c7c2-9596-4aa7-a69f-23c1ec516ffe)
 
 ### Referência usada / Reference used: 
 [Robotics: Modelling, Planning and Control; Sciavicco, et al. 2009](https://link.springer.com/book/10.1007/978-1-84628-642-1)
