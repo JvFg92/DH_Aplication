@@ -44,6 +44,7 @@ The development of the method was validated using an anthropomorphic arm with 3 
 
 ![image](https://github.com/user-attachments/assets/fb2276c0-c112-48a9-955f-f4f296786b1b)
 
+Disponível em / *Avaliable at*: [Robotics: Modelling, Planning and Control; Sciavicco, et al. 2009](https://link.springer.com/book/10.1007/978-1-84628-642-1)
 
 
 ## *Resultados / Results:
@@ -80,40 +81,40 @@ Essa matriz apresenta os termos trigonométricos expandidos, mas é matematicame
 
 # Simplificação do resultado / *Result simplification*:
 
-- **T'(0,0):** \(-sin(\theta_1)sin(\theta_2)cos(\theta_0) + cos(\theta_0)cos(\theta_1)cos(\theta_2)\)  
-  = \( cos(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)  
-  = \( cos(\theta_0)cos(\theta_1 + \theta_2) \)
+- **T'(0,0):** $$\(-sin(\theta_1)sin(\theta_2)cos(\theta_0) + cos(\theta_0)cos(\theta_1)cos(\theta_2)\)$$  
+  = $$\( cos(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)$$  
+  = $$\( cos(\theta_0)cos(\theta_1 + \theta_2) \)$$
   
-- **T'(0,1):** \(-sin(\theta_1)cos(\theta_0)cos(\theta_2) - sin(\theta_2)cos(\theta_0)cos(\theta_1)\)  
-  = \( -cos(\theta_0) [sin(\theta_1)cos(\theta_2) + cos(\theta_1)sin(\theta_2)] \)  
-  = \( -cos(\theta_0)sin(\theta_1 + \theta_2) \)
+- **T'(0,1):** $$\(-sin(\theta_1)cos(\theta_0)cos(\theta_2) - sin(\theta_2)cos(\theta_0)cos(\theta_1)\)$$  
+  = $$\( -cos(\theta_0) [sin(\theta_1)cos(\theta_2) + cos(\theta_1)sin(\theta_2)] \)$$  
+  = $$\( -cos(\theta_0)sin(\theta_1 + \theta_2) \)$$
 
-- **T'(0,3):** \( a_1cos(\theta_0)cos(\theta_1) - a_2sin(\theta_1)sin(\theta_2)cos(\theta_0) + a_2cos(\theta_0)cos(\theta_1)cos(\theta_2) \)  
-  = \( a_1cos(\theta_0)cos(\theta_1) + a_2cos(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)  
-  = \( a_1cos(\theta_0)cos(\theta_1) + a_2cos(\theta_0)cos(\theta_1 + \theta_2) \)
+- **T'(0,3):** $$\( a_1cos(\theta_0)cos(\theta_1) - a_2sin(\theta_1)sin(\theta_2)cos(\theta_0) + a_2cos(\theta_0)cos(\theta_1)cos(\theta_2) \)$$  
+  = $$\( a_1cos(\theta_0)cos(\theta_1) + a_2cos(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)$$  
+  = $$\( a_1cos(\theta_0)cos(\theta_1) + a_2cos(\theta_0)cos(\theta_1 + \theta_2) \)$$
 
-- **T'(1,0):** \(-sin(\theta_0)sin(\theta_1)sin(\theta_2) + sin(\theta_0)cos(\theta_1)cos(\theta_2)\)  
-  = \( sin(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)  
-  = \( sin(\theta_0)cos(\theta_1 + \theta_2) \)
+- **T'(1,0):** $$\(-sin(\theta_0)sin(\theta_1)sin(\theta_2) + sin(\theta_0)cos(\theta_1)cos(\theta_2)\)$$  
+  = $$\( sin(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)$$  
+  = $$\( sin(\theta_0)cos(\theta_1 + \theta_2) \)$$
 
-- **T'(1,1):** \(-sin(\theta_0)sin(\theta_1)cos(\theta_2) - sin(\theta_0)sin(\theta_2)cos(\theta_1)\)  
-  = \( -sin(\theta_0) [sin(\theta_1)cos(\theta_2) + cos(\theta_1)sin(\theta_2)] \)  
-  = \( -sin(\theta_0)sin(\theta_1 + \theta_2) \)
+- **T'(1,1):** $$\(-sin(\theta_0)sin(\theta_1)cos(\theta_2) - sin(\theta_0)sin(\theta_2)cos(\theta_1)\)$$  
+  = $$\( -sin(\theta_0) [sin(\theta_1)cos(\theta_2) + cos(\theta_1)sin(\theta_2)] \)$$  
+  = $$\( -sin(\theta_0)sin(\theta_1 + \theta_2) \)$$
 
-- **T'(1,3):** \( a_1sin(\theta_0)cos(\theta_1) - a_2sin(\theta_0)sin(\theta_1)sin(\theta_2) + a_2sin(\theta_0)cos(\theta_1)cos(\theta_2) \)  
-  = \( a_1sin(\theta_0)cos(\theta_1) + a_2sin(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)  
-  = \( a_1sin(\theta_0)cos(\theta_1) + a_2sin(\theta_0)cos(\theta_1 + \theta_2) \)
+- **T'(1,3):** $$\( a_1sin(\theta_0)cos(\theta_1) - a_2sin(\theta_0)sin(\theta_1)sin(\theta_2) + a_2sin(\theta_0)cos(\theta_1)cos(\theta_2) \)$$  
+  = $$\( a_1sin(\theta_0)cos(\theta_1) + a_2sin(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)$$  
+  = $$\( a_1sin(\theta_0)cos(\theta_1) + a_2sin(\theta_0)cos(\theta_1 + \theta_2) \)$$
 
-- **T'(2,0):** \( sin(\theta_1)cos(\theta_2) + sin(\theta_2)cos(\theta_1) \)  
-  = \( sin(\theta_1 + \theta_2) \)
+- **T'(2,0):** $$\( sin(\theta_1)cos(\theta_2) + sin(\theta_2)cos(\theta_1) \)$$  
+  = $$\( sin(\theta_1 + \theta_2) \)$$
 
-- **T'(2,1):** \( -sin(\theta_1)sin(\theta_2) + cos(\theta_1)cos(\theta_2) \)  
-  = \( cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2) \)  
-  = \( cos(\theta_1 + \theta_2) \)
+- **T'(2,1):** $$\( -sin(\theta_1)sin(\theta_2) + cos(\theta_1)cos(\theta_2) \)$$  
+  = $$\( cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2) \)$$  
+  = $$\( cos(\theta_1 + \theta_2) \)$$
 
-- **T'(2,3):** \( a_1sin(\theta_1) + a_2sin(\theta_1)cos(\theta_2) + a_2sin(\theta_2)cos(\theta_1) \)  
-  = \( a_1sin(\theta_1) + a_2 [sin(\theta_1)cos(\theta_2) + cos(\theta_1)sin(\theta_2)] \)  
-  = \( a_1sin(\theta_1) + a_2sin(\theta_1 + \theta_2) \)
+- **T'(2,3):** $$\( a_1sin(\theta_1) + a_2sin(\theta_1)cos(\theta_2) + a_2sin(\theta_2)cos(\theta_1) \)$$  
+  = $$\( a_1sin(\theta_1) + a_2 [sin(\theta_1)cos(\theta_2) + cos(\theta_1)sin(\theta_2)] \)$$  
+  = $$\( a_1sin(\theta_1) + a_2sin(\theta_1 + \theta_2) \)$$
 
 
 ## **Trajetória calculada / *Calculated trajectory*:**
@@ -121,5 +122,8 @@ Essa matriz apresenta os termos trigonométricos expandidos, mas é matematicame
 ![image](https://github.com/user-attachments/assets/b30c4a6f-b0bd-4a3a-b591-6b1ac08d5baf)
 
 
-### [Referência usada / Reference used](https://link.springer.com/book/10.1007/978-1-84628-642-1)
+### Referência usada / Reference used: 
+[Robotics: Modelling, Planning and Control; Sciavicco, et al. 2009](https://link.springer.com/book/10.1007/978-1-84628-642-1)
 
+* O acesso ao material é provido pela Universidade Federal de Santa Catarina (UFSC)
+* *The access is provided by Federal University of Santa Catarina (UFSC)*
