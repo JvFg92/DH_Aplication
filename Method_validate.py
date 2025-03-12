@@ -6,18 +6,18 @@ if __name__ == "__main__":
     #Define the DH parameters:(exempli gratia: Anthropomorphic Arm)
     Anthropomorphic_Arm  = [
         {'type': 'revolute', 'a': 0, 'alpha': sp.pi/2, 'd': 0.0,
-         'errors': {'phi': 0.05, 'epsilon': 0.02, 'sigma': 0.01, 'beta': 0.03}},
+         'errors': {'sigma': 0.01, 'epsilon': 0.02, 'beta': 0.03, 'phi': 0.05,}},
 
         {'type': 'revolute', 'alpha': 0, 'd': 0, 
-         'errors': {'phi': 0.03, 'epsilon': 0.01, 'sigma': 0.02, 'beta': 0.02}},
+         'errors': {'sigma': 0.01, 'epsilon': 0.02, 'beta': 0.03, 'phi': 0.05,}},
 
         {'type': 'revolute', 'alpha': 0, 'd': 0, 
-         'errors': {'phi': 0.0, 'epsilon': 0.05, 'sigma': 0.0, 'beta': 0.0}}
+         'errors': {'sigma': 0.01, 'epsilon': 0.02, 'beta': 0.03, 'phi': 0.05,}}
     ]
 
     #Create the robot:
     robot = DH.Mechanism(Anthropomorphic_Arm)
-    
+
     """Begin the calculations algebrically"""
 
     #Calculate the forward kinematics without errors:
@@ -41,14 +41,6 @@ if __name__ == "__main__":
     print("\nMatrix:\n", matrix_g_numerical)
     print("\nPosition:\n", position_g_numerical)
 
-    """
-    #Validating the matrix:
-    for i in range(matrix_numerical.shape[0]):
-        for j in range(matrix_numerical.shape[1]):
-            print(f"\n Element ({i},{j}):", matrix_numerical[i,j], end=" ")
-    print("\n")
-    """
-
     #Calculate the forward kinematics with errors DH parameters applied:
     matrix_g_numerical_e, position_g_numerical_e = robot.evaluate_param(matrix_g_e, apply_errors=True)
     print("\nMatrix and position numerical with errors:\n")
@@ -70,13 +62,13 @@ if __name__ == "__main__":
     }    
 
     #Calculate the forward kinematics without errors DH parameters applied:
-    matrix_numerical, position_numerical = robot.evaluate_param(matrix_g)
+    matrix_numerical, position_numerical = robot.evaluate_param(matrix_g,variable_values)
     print("\nMatrix and position numerical without errors:\n")
     print("\nMatrix:\n", matrix_numerical)
     print("\nPosition:\n", position_numerical)
 
     #Calculate the forward kinematics with errors DH parameters applied:
-    matrix_numerical_e, position_numerical_e = robot.evaluate_param(matrix_g_e, apply_errors=True)
+    matrix_numerical_e, position_numerical_e = robot.evaluate_param(matrix_g_e, variable_values, apply_errors=True)
     print("\nMatrix and position numerical with errors:\n")
     print("Matrix:\n", matrix_numerical_e)
     print("\nPosition:\n", position_numerical_e)
@@ -85,11 +77,8 @@ if __name__ == "__main__":
     print("\n [X, Y, Z] position values:")
     print("Position without erros: \n", [p for p in position_numerical])
     print("Position with errors: \n", [p for p in position_numerical_e])
-    error = [0, 0, 0]
-    for i in range(3):
-        error[i] = position_numerical_e[i] - position_numerical[i]
-    print("\n [X, Y, Z] error values:")
-    print("\n \n", error)
+    error=robot.evaluate_error(position_numerical, position_numerical_e)
+    print("\n Error values: \n", error)
         
     #Plot the robot:
     robot.plot_mechanism(variable_values, title ='Mechanism kinematics with and without errors')
