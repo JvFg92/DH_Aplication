@@ -5,30 +5,33 @@ if __name__ == "__main__":
     
     #Define the DH parameters:(Three-link planar arm)
     study_case = [
-        {'type': 'revolute', 'a':100, 'alpha': 0, 'd': 0,
-         'errors': {'sigma': 0.5, 'beta': 0.01,}},
+        {'type': 'revolute', 'a':100, 'alpha': 0, 'd': 0, 
+         'errors': {'sigma': 0.5, 'beta': 0.017453 ,}},
 
-        {'type': 'revolute', 'a':150, 'alpha': 0, 'd': 0, 
-         'errors': {'sigma': 1.0, 'beta': 0.05,}},
+        {'type': 'revolute', 'a':150, 'alpha': 0, 'd': 0,
+         'errors': {'sigma': 1.0, 'beta': 0.017453,}},
          
         {'type': 'revolute', 'a':80, 'alpha': 0, 'd': 0, 
-        'errors': {'sigma': 0.75, 'beta': 0.07,}},
+        'errors': {'sigma': 0.75, 'beta': 0.017453,}},
     ]
     
     #Create the robot:
     robot = DH.Mechanism(study_case)
-
-    robot.plot_mechanism(title ='Three-link planar arm', initial_config=True)
-    
+        
     #To plot the robot, we need to provide the values of the variables. including other parameters that are not theta
     variable_values = {
     #Variables not provided:
-    
+    robot.a[0]:     100,
+    robot.a[1]:     150,
+    robot.a[2]:     80,
+        
     #Variables of movement:
     robot.theta[0]: (sp.pi/12),   #theta_0 for the first cylindrical joint 15 degrees
     robot.theta[1]: (sp.pi/4),    #theta_1 for the second cylindrical joint 45 degrees
     robot.theta[2]: (sp.pi/3),    #theta_2 for the third cylindrical joint 60 degrees
     } 
+
+    #robot.plot_mechanism(title ='Mechanism kinematics without errors',initial_config=True) 
 
     """Begin the calculations algebrically"""
 
@@ -49,7 +52,7 @@ if __name__ == "__main__":
 
     #Calculate the forward kinematics without errors DH parameters applied:
     matrix_g_numerical, position_g_numerical = robot.evaluate_param(matrix_g)
-    print("\nMatrix and position numerical without errors:\n")
+    print("\nMatrix and position numerical without errors:(Book Validation)\n")
     print("\nMatrix:\n", matrix_g_numerical)
     print("\nPosition:\n", position_g_numerical)
 

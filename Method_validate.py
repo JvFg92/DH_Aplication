@@ -5,18 +5,33 @@ if __name__ == "__main__":
     
     #Define the DH parameters:(exempli gratia: Anthropomorphic Arm)
     Anthropomorphic_Arm  = [
-        {'type': 'revolute', 'a': 0, 'alpha': sp.pi/2, 'd': 0.0,
+        {'type': 'revolute',  'alpha': sp.pi/2, 'd': 0.0,
          'errors': {'sigma': 0.01, 'epsilon': 0.02, 'beta': 0.03, 'phi': 0.05,}},
 
-        {'type': 'revolute', 'alpha': 0, 'd': 0, 
+        {'type': 'revolute',  'alpha': 0, 'd': 0, 
          'errors': {'sigma': 0.01, 'epsilon': 0.02, 'beta': 0.03, 'phi': 0.05,}},
 
-        {'type': 'revolute', 'alpha': 0, 'd': 0, 
+        {'type': 'revolute', 'a':1, 'alpha': 0, 'd': 0, 
          'errors': {'sigma': 0.01, 'epsilon': 0.02, 'beta': 0.03, 'phi': 0.05,}}
     ]
 
     #Create the robot:
     robot = DH.Mechanism(Anthropomorphic_Arm)
+
+    #Evaluate the position of the effector using optional variable values:
+    """To plot the robot, we need to provide the values of the variables. including other parameters that are not theta"""
+    variable_values = {
+    #Variables not provided (Defined in the DH parameters, for plot eg):
+    robot.a[0]:     5,
+    robot.a[1]:     10,
+    robot.a[2]:     15,
+    #Variables of movement:
+    robot.theta[0]: 0.5,    #theta_0 for the first cylindrical joint
+    robot.theta[1]: 1.0,    #theta_1 for the second cylindrical joint   
+    robot.theta[2]: 1.5     #theta_2 for the third cylindrical joint
+    }
+
+    #robot.plot_mechanism(variable_values, title ='Mechanism kinematics without errors',initial_config=True)
 
     """Begin the calculations algebrically"""
 
@@ -37,8 +52,14 @@ if __name__ == "__main__":
 
     #Calculate the forward kinematics without errors DH parameters applied:
     matrix_g_numerical, position_g_numerical = robot.evaluate_param(matrix_g)
-    print("\nMatrix and position numerical without errors:\n")
-    print("\nMatrix:\n", matrix_g_numerical)
+    print("\nMatrix and position numerical without errors:(Book Validation)\n")
+    
+    #Validating the matrix:
+    for i in range(matrix_g_numerical.shape[0]):
+        for j in range(matrix_g_numerical.shape[1]):
+            print(f"\n Element ({i},{j}):", matrix_g_numerical[i,j], end=" ")
+    print("\n")
+
     print("\nPosition:\n", position_g_numerical)
 
     #Calculate the forward kinematics with errors DH parameters applied:
@@ -48,18 +69,6 @@ if __name__ == "__main__":
     print("\nPosition:\n", position_g_numerical_e)
 
     """Start calculations numerically with optional variable values ​​(graphical example):"""
-
-    #Evaluate the position of the effector using optional variable values:
-    """To plot the robot, we need to provide the values of the variables. including other parameters that are not theta"""
-    variable_values = {
-    #Variables not provided (Defined in the DH parameters, for plot eg):
-    robot.a[1]:     1,
-    robot.a[2]:     1,
-    #Variables of movement:
-    robot.theta[0]: 0.5,    #theta_0 for the first cylindrical joint
-    robot.theta[1]: 1.0,    #theta_1 for the second cylindrical joint   
-    robot.theta[2]: 1.5     #theta_2 for the third cylindrical joint
-    }    
 
     #Calculate the forward kinematics without errors DH parameters applied:
     matrix_numerical, position_numerical = robot.evaluate_param(matrix_g,variable_values)

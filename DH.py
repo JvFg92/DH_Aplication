@@ -51,7 +51,7 @@ class Mechanism:
                 self.theta.append(sp.Symbol(f'theta_{i}'))
                 self.phi.append(sp.Symbol(f'phi_{i}'))
             elif params['type'] == 'prismatic':
-                self.theta.append(0)  #theta normally is fixed (0) for prismatic joints
+                self.theta.append(sp.Symbol(f'theta_{i}'))
                 self.phi.append(sp.Symbol(f'phi_{i}'))
             self.d.append(sp.Symbol(f'd_{i}'))
             self.epsilon.append(sp.Symbol(f'epsilon_{i}'))
@@ -105,12 +105,9 @@ class Mechanism:
         return T, position
     
     def evaluate_param(self, T, variable_values=None, apply_errors=False):
-        """Evaluate the position of the effector using params from self.param and optional variable values."""
-        
         #Build a dictionary with the parameters
         subs_dict = {}
         for i, params in enumerate(self.param):
-            
             #Only substitute parameters if they exist in params
             if 'a' in params:
                 subs_dict[self.a[i]] = params['a']
@@ -118,6 +115,8 @@ class Mechanism:
                 subs_dict[self.alpha[i]] = params['alpha']
             if 'd' in params:
                 subs_dict[self.d[i]] = params['d']
+            if 'theta' in params:
+                subs_dict[self.theta[i]] = params['theta']
             
             #Handle theta based on joint type
             if params.get('type') == 'prismatic':
@@ -132,19 +131,22 @@ class Mechanism:
                 errors = params['errors']
                 if 'phi' in errors:
                     subs_dict[self.phi[i]] = errors['phi']
-                else: subs_dict[self.phi[i]] = 0
+                else:
+                    subs_dict[self.phi[i]] = 0
                 if 'epsilon' in errors:
                     subs_dict[self.epsilon[i]] = errors['epsilon']
-                else: subs_dict[self.epsilon[i]] = 0
+                else:
+                    subs_dict[self.epsilon[i]] = 0
                 if 'sigma' in errors:
                     subs_dict[self.sigma[i]] = errors['sigma']
-                else: subs_dict[self.sigma[i]] = 0
+                else:
+                    subs_dict[self.sigma[i]] = 0
                 if 'beta' in errors:
                     subs_dict[self.beta[i]] = errors['beta']
-                else: subs_dict[self.beta[i]] = 0
+                else:
+                    subs_dict[self.beta[i]] = 0
             else:
-                
-                #If no errors are applied, explicitly set error terms to 0 only if not already in subs_dict
+                #If no errors are applied, set error terms to 0 only if not already in subs_dict
                 if self.phi[i] not in subs_dict:
                     subs_dict[self.phi[i]] = 0
                 if self.epsilon[i] not in subs_dict:
@@ -153,26 +155,38 @@ class Mechanism:
                     subs_dict[self.sigma[i]] = 0
                 if self.beta[i] not in subs_dict:
                     subs_dict[self.beta[i]] = 0
-        
-        #Add variable values if provided
+    
+        #Only apply variable_values if provided; otherwise, keep symbolic
         if variable_values:
-            subs_dict.update(variable_values)
-
-        #Substitute only the provided values, leaving missing ones as symbols
+            valid_symbols = (
+                self.a + self.alpha + self.d + self.theta +
+                self.phi + self.epsilon + self.sigma + self.beta
+            )
+            for symbol, value in variable_values.items():
+                if symbol in valid_symbols:
+                    subs_dict[symbol] = value
+        
+        #Substitute values into the transformation matrix
         T_numerica = T.subs(subs_dict)
         return T_numerica, T_numerica[:3, 3]
     
     def get_joint_positions(self, variable_values, apply_errors=False):
         """Return the joint positions for the mechanism in 3D."""
         
-        positions = [[0, 0, 0]] #Origin
+        positions = [[0, 0, 0]]  #Origin
         T = sp.eye(4)
         for i in range(self.n_joints):
             T = T * self.dh_matrix(i, apply_errors)
             T_eval, pos_eval = self.evaluate_param(T, variable_values, apply_errors)
-            pos_num = [float(pos_eval[0]), float(pos_eval[1]), float(pos_eval[2])]
-            positions.append(pos_num)
-        return np.array(positions)
+            positions.append(pos_eval)
+        
+        #Try to convert all positions to float, raising an error if any symbol is left
+        try:
+            positions_num = np.array([[float(coord) for coord in pos] for pos in positions])
+            return positions_num
+        except TypeError:
+            print("Aviso: Posições contêm símbolos não substituídos:", positions)
+            raise TypeError("Todos os símbolos devem ser substituídos por valores numéricos para plotagem")
     
     def evaluate_error(self, pos_no_error, pos_with_error):
         try:
@@ -181,76 +195,58 @@ class Mechanism:
         except (TypeError, ValueError) as e:
             raise ValueError("As posições devem ser vetores 3D com valores numéricos") from e
 
-        # Verificar se os vetores têm dimensão 3
+        #Verify if the vectors have the correct size
         if len(position_no_error) != 3 or len(position_with_error) != 3:
             raise ValueError("As posições devem ser vetores 3D (x, y, z)")
 
-        # Calcular o erro posicional real
+        # Evaluate real error position
         error = np.linalg.norm(position_no_error - position_with_error)
         return error
 
     def plot_mechanism(self, variable_values=None, title=None, initial_config=False):
-        """
-        Plot the mechanism in 3D. Can show either the initial configuration or the full
-        forward kinematics with error vector.
 
-        Args:
-            variable_values: Dictionary with variable values (optional).
-            title: Title of the plot (optional).
-            initial_config: If True, plots the initial configuration without full kinematics.
-                            If False, plots the full kinematics with error vector (default).
-        """
-        if initial_config:
-            # Plot initial configuration without full forward kinematics
-            positions = [[0, 0, 0]]  # Origin
+        #Create figure
+        fig = plt.figure(figsize=(12, 5))
+        ax = fig.add_subplot(111, projection='3d')
+
+        #Define initial configuration values (theta = 0, d = 0, a = 0 where applicable)
+        initial_values = {}
+        for i, params in enumerate(self.param):
+            if params['type'] in ['revolute', 'cylindrical']:
+                initial_values[self.theta[i]] = 0
+            elif params['type'] == 'prismatic':
+                initial_values[self.theta[i]] = params.get('theta', 0)
+                initial_values[self.d[i]] = 0
             
-            # Build initial substitution dictionary
-            subs_dict = {}
-            for i, params in enumerate(self.param):
-                if 'a' in params:
-                    subs_dict[self.a[i]] = params['a']
-                if 'alpha' in params:
-                    subs_dict[self.alpha[i]] = params['alpha']
-                if 'd' in params:
-                    subs_dict[self.d[i]] = params['d']
-                if params['type'] in ['revolute', 'cylindrical']:
-                    subs_dict[self.theta[i]] = 0  # Default theta = 0
-                elif params['type'] == 'prismatic':
-                    subs_dict[self.theta[i]] = params.get('theta_offset', 0)
-                    subs_dict[self.d[i]] = 0  # Default d = 0
-                subs_dict[self.phi[i]] = 0
-                subs_dict[self.epsilon[i]] = 0
-                subs_dict[self.sigma[i]] = 0
-                subs_dict[self.beta[i]] = 0
-            
-            # Update with provided variable values
-            if variable_values:
-                subs_dict.update(variable_values)
-            
-            # Calculate joint positions for initial config
-            T = sp.eye(4)
-            for i in range(self.n_joints):
-                T_i = self.dh_matrix(i, apply_errors=False)
-                if i == 0:
-                    T = T_i
-                else:
-                    T = T * T_i
-                pos = T[:3, 3].subs(subs_dict)
-                try:
-                    pos_num = [float(pos[0]), float(pos[1]), float(pos[2])]
-                except (TypeError, ValueError):
-                    pos_num = [0, 0, 0]  # Fallback if symbolic
-                positions.append(pos_num)
-            
-            positions = np.array(positions)
-            
-            # Create figure for initial config
-            fig = plt.figure(figsize=(12, 5))
-            ax = fig.add_subplot(111, projection='3d')
-            ax.plot(positions[:, 0], positions[:, 1], positions[:, 2], 'm-o', label='Initial Configuration no error')
+            if 'a' not in params:
+                initial_values[self.a[i]] = 0
+            if 'alpha' not in params:
+                initial_values[self.alpha[i]] = 0
+            if 'd' not in params:
+                initial_values[self.d[i]] = 0
+            #Ensure errors are zero for initial config
+            initial_values[self.phi[i]] = 0
+            initial_values[self.epsilon[i]] = 0
+            initial_values[self.sigma[i]] = 0
+            initial_values[self.beta[i]] = 0
         
+        #Calculate initial configuration
+        try:
+            positions_initial = self.get_joint_positions(initial_values, apply_errors=False)
+        except TypeError as e:
+            raise TypeError("Could not compute initial configuration") from e
+
+        if initial_config:
+            #Plot only initial configuration, optionally with variable_values
+            if variable_values:
+                try:
+                    positions_initial = self.get_joint_positions(variable_values, apply_errors=False)
+                except TypeError as e:
+                    raise TypeError("Could not apply variable values to initial configuration") from e
+            ax.plot(positions_initial[:, 0], positions_initial[:, 1], positions_initial[:, 2], 
+                    'm-o', label='Initial Configuration')
         else:
-            # Plot full kinematics with error vector
+            #Calculate full kinematics with provided variable_values
             try:
                 joints_no_error = self.get_joint_positions(variable_values, apply_errors=False)
                 joints_with_error = self.get_joint_positions(variable_values, apply_errors=True)
@@ -260,18 +256,20 @@ class Mechanism:
             except TypeError as e:
                 raise TypeError("Could not convert values") from e
             
-            # Create figure for full kinematics
-            fig = plt.figure(figsize=(12, 5))
-            ax = fig.add_subplot(111, projection='3d')
-            ax.plot(joints_no_error[:, 0], joints_no_error[:, 1], joints_no_error[:, 2], 'b-o', label='Without errors')
-            ax.plot(joints_with_error[:, 0], joints_with_error[:, 1], joints_with_error[:, 2], 'r--o', label='With errors')
+            #Plot all configurations
+            ax.plot(positions_initial[:, 0], positions_initial[:, 1], positions_initial[:, 2], 
+                    'm-o', label='Initial Configuration')
+            ax.plot(joints_no_error[:, 0], joints_no_error[:, 1], joints_no_error[:, 2], 
+                    'b-o', label='Without errors')
+            ax.plot(joints_with_error[:, 0], joints_with_error[:, 1], joints_with_error[:, 2], 
+                    'r--o', label='With errors')
             ax.quiver(
                 pos_no_error[0], pos_no_error[1], pos_no_error[2],
                 error_vector[0], error_vector[1], error_vector[2],
                 color='g', linewidth=2, label='Error vector'
             )
         
-        # Common plot settings
+        #Common plot settings
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
