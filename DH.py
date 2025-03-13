@@ -12,7 +12,7 @@ Dh_param = [
         {'type': 'revolute', 'a':0, 'alpha': 0, 'd': 0,
          'errors': {'sigma': 0, 'beta': 0, 'epsilon': 0, 'phi': 0,}},
 
-        {'type': 'prismatic', 'a':150, 'alpha': 0, theta_offset: 0,
+        {'type': 'prismatic', 'a':150, 'alpha': 0, theta: 0,
          'errors': {'sigma': 0, 'beta': 0, 'epsilon': 0, 'phi': 0,}}, 
     ]
 
@@ -21,11 +21,11 @@ Dh_param = [
     #Variables not provided in a first moment (Not defined in the Dh_param):
     Mechanism.a[0]: 150,           #a_0 for the first cylindrical joint 150mm
     Mechanism.alpha[1]: 0.01,      #alpha_0 for the first cylindrical joint 0.01 radians
-
+    #...#
     #Variables of movement:
     Mechanism.theta[0]: sp.pi/12,   #theta_0 for the first cylindrical joint 15 degrees
     Mechanism.d[1]: 15,             #d_1 for the second Prismatic joint 45 degrees
-    
+    #...#
     } 
 
 """

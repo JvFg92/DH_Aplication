@@ -26,9 +26,9 @@ if __name__ == "__main__":
     robot.a[1]:     10,
     robot.a[2]:     15,
     #Variables of movement:
-    robot.theta[0]: 0.5,    #theta_0 for the first cylindrical joint
+    robot.theta[0]: 0.5,        #theta_0 for the first cylindrical joint
     robot.theta[1]: sp.pi/4,    #theta_1 for the second cylindrical joint   
-    robot.theta[2]: sp.pi/6,     #theta_2 for the third cylindrical joint
+    robot.theta[2]: sp.pi/6,    #theta_2 for the third cylindrical joint
     }
 
     #robot.plot_mechanism(variable_values, title ='Mechanism kinematics without errors',initial_config=True)
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     print("Position without erros: \n", [p for p in position_numerical])
     print("Position with errors: \n", [p for p in position_numerical_e])
     error=robot.evaluate_error(position_numerical, position_numerical_e)
-    print("\n Error values: \n", error)
+    print("\n Error value: \n", error)
         
     #Plot the robot:
     robot.plot_mechanism(variable_values, title ='Mechanism kinematics with and without errors')
