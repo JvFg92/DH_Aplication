@@ -32,6 +32,8 @@ Dh_param = [
 
 class Mechanism:
     def __init__(self, param):
+        """Initialize the mechanism with the DH parameters."""
+
         self.param = param
         self.n_joints = len(param)
         #print("Joint Numbers:", self.n_joints) #Debugging
@@ -58,17 +60,13 @@ class Mechanism:
 
     def dh_matrix(self,i,apply_errors=False):
       """Return the symbolic homogeneous matrix."""
-      params = self.param[i]
+
       #Nominal or error values
       a = self.a[i] + (self.sigma[i] if apply_errors else 0)
       alpha = self.alpha[i] + (self.beta[i] if apply_errors else 0)
       d = self.d[i] + (self.epsilon[i] if apply_errors else 0)
+      theta = self.theta[i] + (self.phi[i] if apply_errors else 0)
       
-      if params['type'] in ['revolute', 'cylindrical']:
-          theta = self.theta[i] + (self.phi[i] if apply_errors else 0)
-      else:  #prismatic
-          theta = params.get('theta_offset', 0) + (self.phi[i] if apply_errors else 0)
-
       cos_theta = sp.cos(theta)
       sin_theta = sp.sin(theta)
       cos_alpha = sp.cos(alpha)
@@ -82,18 +80,20 @@ class Mechanism:
       ])
     
     def forward_kinematics(self, apply_errors=False):
+        """Return the symbolic forward kinematics matrix and position."""
+
         T = sp.eye(4)  #Matrix 4x4 identity
         for i in range(self.n_joints):
             Ti = self.dh_matrix(i, apply_errors)
             """
-            #Validating the matrix:
+            #Validating the matrix created:
             print(f"\nMatrix {i}:\n", Tiself.evaluate_param(Ti))
             """
             if(i==0):T=Ti
             else:
                 T = T * Ti
                 """
-                #Validating the matrix:
+                #Validating the matrix element to element after multiplication:
                 print(f"Matrix {i}:")
                 A = self.evaluate_param(T)
                 for m in range(A.shape[0]):
@@ -105,6 +105,8 @@ class Mechanism:
         return T, position
     
     def evaluate_param(self, T, variable_values=None, apply_errors=False):
+        """Return the numerical transformation matrix and position."""
+
         #Build a dictionary with the parameters
         subs_dict = {}
         for i, params in enumerate(self.param):
@@ -163,8 +165,7 @@ class Mechanism:
                 self.phi + self.epsilon + self.sigma + self.beta
             )
             for symbol, value in variable_values.items():
-                if symbol in valid_symbols:
-                    subs_dict[symbol] = value
+                if symbol in valid_symbols: subs_dict[symbol] = value
         
         #Substitute values into the transformation matrix
         T_numerica = T.subs(subs_dict)
@@ -173,7 +174,7 @@ class Mechanism:
     def get_joint_positions(self, variable_values, apply_errors=False):
         """Return the joint positions for the mechanism in 3D."""
         
-        positions = [[0, 0, 0]]  #Origin
+        positions = [[0, 0, 0]] #Origin
         T = sp.eye(4)
         for i in range(self.n_joints):
             T = T * self.dh_matrix(i, apply_errors)
@@ -199,7 +200,7 @@ class Mechanism:
         if len(position_no_error) != 3 or len(position_with_error) != 3:
             raise ValueError("As posições devem ser vetores 3D (x, y, z)")
 
-        # Evaluate real error position
+        #Evaluate real error position
         error = np.linalg.norm(position_no_error - position_with_error)
         return error
 
