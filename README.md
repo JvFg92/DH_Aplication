@@ -4,20 +4,21 @@ Desenvolvimento:
 - DH.py:
   - Cálculo da cinemática direta (com e sem erros de geometria aplicados às juntas) algebricamente e numericamente;
   - Cálculo de erro de trajetória;
+  - Definição das coordenadas do efetuador final;
   - Plotagem gráfica do mecanismo após movimentação das juntas;
 
-- Method_validate.py:
+- Anthropomorphic_Arm.py:
   - Arquivo contendo a validação do método, descrita em sequência;
 
-- main.py:
+- Spherical_Arm.py:
   - Arquivo contendo validação secundária com um braço esférico;
 
-- test.py:
+- Three-link_planar_arm.py:
   - Arquivo contendo o a utilização do método em um elo modelo para pesquisa.
 
 O desenvolvimento do método foi validado utilizando um braço antropomórfico com 3 juntas cilíndricas (Imagem 1 - Braço Antropomórfico), onde a cinemática direta coincidiu com o esperado na bibliografia (Resultados)!
 
-*Nota: Testes futuros serão realizados no arquivo test.py.
+*Nota: Novas adições podem acontecer de acordo com a necessidade de uso.
 
 ### **PT/EN:** 
 # Development of the Denavit-Hartenberg method in Python, in a project of dimensional and error analysis in manipulator robots!
@@ -26,20 +27,21 @@ Development:
 - DH.py:
   - Calculation of direct kinematics (with and without geometry errors applied to the joints) algebraically and numerically;
   - Trajectory error calculation;
+  - Definition of end effector coordinates;
   - Graphical plotting of the mechanism after joint movement;
 
-- Method_validate.py:
+- Anthropomorphic_Arm.py:
   - File containing the validation of the method, described in sequence;
 
-- main.py:
+- Spherical_Arm.py:
   - File containing secondary validation with a spherical arm;
 
-- test.py:
+- Three-link_planar_arm.py:
   - File containing the use of the method in a model link for research.
  
 The development of the method was validated using an anthropomorphic arm with 3 cylindrical joints (Image 1 - Anthropomorphic Arm), where the direct kinematics coincided with what was expected in the bibliography (Results)!
 
-*Note: Future tests will be performed in the test.py file.
+*Note: New additions may occur according to usage needs.
 
 
 ## **Antropomorphic Arm**
