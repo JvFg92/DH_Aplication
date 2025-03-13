@@ -52,6 +52,9 @@ Disponível em / *Avaliable at*: [Robotics: Modelling, Planning and Control; Sci
 ## *Resultados / Results:
 
 **Bibliografia / bibliography:**
+Parâmetros Denavit-Hartenberg base:
+
+
 
 $$
 T = \begin{bmatrix}
@@ -119,9 +122,29 @@ Essa matriz apresenta os termos trigonométricos expandidos, mas é matematicame
   = $$\( a_1sin(\theta_1) + a_2sin(\theta_1 + \theta_2) \)$$
 
 
+
 ## **Trajetória calculada / *Calculated trajectory*:**
 
-![image](https://github.com/user-attachments/assets/fc90c7c2-9596-4aa7-a69f-23c1ec516ffe)
+![image](https://github.com/user-attachments/assets/903c9679-f460-4f5c-b5fe-55307f81f451)
+
+
+## **Parâmetros utilizados / *Used Parameters*:**
+
+| Joint (i) | θᵢ (rad) | dᵢ (mm)  | aᵢ (mm) | αᵢ (rad) |
+|-----------|---------:|--------:|-------:|---------:|
+| 1         |   0.5    |    0   |   5    |    $\pi/2$     |
+| 2         |   $\pi/4$    |    0   |   10    |    0     |
+| 3         |   $\pi/6$     |    0   |   15    |    0     |
+
+
+
+
+| Joint (i) | $\phi$ᵢ (rad) | $\epsilon$ᵢ (mm)  | $\sigma$ᵢ (mm) | αᵢ (rad) |
+|-----------|---------:|--------:|-------:|---------:|
+| 1         |   0.001    |    0.02   |   0.01    |    0.0003     |
+| 2         |   0.005    |    0.04   |   0.05    |    0.0006     |
+| 3         |   0.015    |    0.06   |   0.10    |    0.0009     |
+
 
 ### Referência usada / Reference used: 
 [Robotics: Modelling, Planning and Control; Sciavicco, et al. 2009](https://link.springer.com/book/10.1007/978-1-84628-642-1)
