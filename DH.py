@@ -38,25 +38,22 @@ class Mechanism:
         self.n_joints = len(param)
         #print("Joint Numbers:", self.n_joints) #Debugging
 
-        #Defining symbols for DH:
+        # Defining symbols for DH:
         self.theta = []
         self.d = []
         self.a = [sp.Symbol(f'a_{i}') for i in range(self.n_joints)]
         self.alpha = [sp.Symbol(f'alpha_{i}') for i in range(self.n_joints)]
-        self.phi = []
-        self.epsilon = []
+        self.phi = [sp.Symbol(f'phi_{i}') for i in range(self.n_joints)]
+        self.epsilon = [sp.Symbol(f'epsilon_{i}') for i in range(self.n_joints)]
         self.sigma = [sp.Symbol(f'sigma_{i}') for i in range(self.n_joints)]
         self.beta = [sp.Symbol(f'beta_{i}') for i in range(self.n_joints)]
 
         for i, params in enumerate(param):
             if params['type'] in ['revolute', 'cylindrical']:
                 self.theta.append(sp.Symbol(f'theta_{i}'))
-                self.phi.append(sp.Symbol(f'phi_{i}'))
             elif params['type'] == 'prismatic':
                 self.theta.append(sp.Symbol(f'theta_{i}'))
-                self.phi.append(sp.Symbol(f'phi_{i}'))
             self.d.append(sp.Symbol(f'd_{i}'))
-            self.epsilon.append(sp.Symbol(f'epsilon_{i}'))
 
     def dh_matrix(self,i,apply_errors=False):
       """Return the symbolic homogeneous matrix."""
@@ -85,22 +82,15 @@ class Mechanism:
         T = sp.eye(4)  #Matrix 4x4 identity
         for i in range(self.n_joints):
             Ti = self.dh_matrix(i, apply_errors)
+            T = T * Ti
             """
-            #Validating the matrix created:
-            print(f"\nMatrix {i}:\n", Tiself.evaluate_param(Ti))
+            print(f"\nMatrix {i}:")
+            A, pos = self.evaluate_param(T)
+            for m in range(A.shape[0]):
+                for n in range(A.shape[1]):
+                    print(f"\n Element ({m},{n}):", A[m,n], end=" ")
+            print("\n")
             """
-            if(i==0):T=Ti
-            else:
-                T = T * Ti
-                """
-                #Validating the matrix element to element after multiplication:
-                print(f"Matrix {i}:")
-                A = self.evaluate_param(T)
-                for m in range(A.shape[0]):
-                    for n in range(A.shape[1]):
-                        print(f"\n Element ({m},{n}):", A[m,n], end=" ")
-                print("\n")
-                """
         position = T[:3, 3]
         return T, position
     
@@ -133,20 +123,16 @@ class Mechanism:
                 errors = params['errors']
                 if 'phi' in errors:
                     subs_dict[self.phi[i]] = errors['phi']
-                else:
-                    subs_dict[self.phi[i]] = 0
+                
                 if 'epsilon' in errors:
                     subs_dict[self.epsilon[i]] = errors['epsilon']
-                else:
-                    subs_dict[self.epsilon[i]] = 0
+                
                 if 'sigma' in errors:
                     subs_dict[self.sigma[i]] = errors['sigma']
-                else:
-                    subs_dict[self.sigma[i]] = 0
+                
                 if 'beta' in errors:
                     subs_dict[self.beta[i]] = errors['beta']
-                else:
-                    subs_dict[self.beta[i]] = 0
+                
             else:
                 #If no errors are applied, set error terms to 0 only if not already in subs_dict
                 if self.phi[i] not in subs_dict:
@@ -213,12 +199,8 @@ class Mechanism:
         #Define initial configuration values (theta = 0, d = 0, a = 0 where applicable)
         initial_values = {}
         for i, params in enumerate(self.param):
-            if params['type'] in ['revolute', 'cylindrical']:
-                initial_values[self.theta[i]] = 0
-            elif params['type'] == 'prismatic':
-                initial_values[self.theta[i]] = params.get('theta', 0)
-                initial_values[self.d[i]] = 0
-            
+            if 'theta' not in params:
+                initial_values[self.theta[i]] = 0           
             if 'a' not in params:
                 initial_values[self.a[i]] = 0
             if 'alpha' not in params:

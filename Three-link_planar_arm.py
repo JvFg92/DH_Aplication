@@ -4,34 +4,40 @@ import DH
 if __name__ == "__main__":
     
     #Define the DH parameters:(Three-link planar arm)
-    study_case = [
-        {'type': 'revolute', 'a':100, 'alpha': 0, 'd': 0, 
+    Three_link_planar_arm = [
+        {'type': 'revolute', 'a': 80, 'alpha': 0, 'd': 5, 
          'errors': {'sigma': 0.5, 'beta': 0.017453 ,}},
 
-        {'type': 'revolute', 'a':150, 'alpha': 0, 'd': 0,
-         'errors': {'sigma': 1.0, 'beta': 0.017453,}},
+        {'type': 'revolute', 'a': 80, 'alpha': 0, 'd': 0,
+         'errors': {'sigma': 0.5, 'beta': 0.017453 ,}},
          
-        {'type': 'revolute', 'a':80, 'alpha': 0, 'd': 0, 
-        'errors': {'sigma': 0.75, 'beta': 0.017453,}},
+        {'type': 'revolute', 'a': 0, 'alpha': 0, 'd': 0, 
+        'errors': {'sigma': 0.5, 'beta': 0.017453 ,}},
     ]
     
     #Create the robot:
-    robot = DH.Mechanism(study_case)
+    robot = DH.Mechanism(Three_link_planar_arm)
         
     #To plot the robot, we need to provide the values of the variables. including other parameters that are not theta
     variable_values = {
-    #Variables not provided:
-    robot.a[0]:     100,
-    robot.a[1]:     150,
-    robot.a[2]:     80,
+    #Variables not provided firstly:
+    
         
     #Variables of movement:
     robot.theta[0]: (sp.pi/12),   #theta_0 for the first cylindrical joint 15 degrees
     robot.theta[1]: (sp.pi/4),    #theta_1 for the second cylindrical joint 45 degrees
     robot.theta[2]: (sp.pi/3),    #theta_2 for the third cylindrical joint 60 degrees
+
+    #Variables of errors:
+    robot.epsilon[0]: 0.0,       #epsilon_0 for the first cylindrical joint
+    robot.epsilon[1]: 0.0,       #epsilon_1 for the second cylindrical joint
+    robot.epsilon[2]: 0.0,       #epsilon_2 for the third cylindrical joint
+    robot.phi[0]: 0.0,           #phi_0 for the first cylindrical joint
+    robot.phi[1]: 0.0,           #phi_1 for the second cylindrical joint
+    robot.phi[2]: 0.0,           #phi_2 for the third cylindrical joint
     } 
 
-    #robot.plot_mechanism(title ='Mechanism kinematics without errors',initial_config=True) 
+    robot.plot_mechanism( title ='Manipulador em Estado Inicial',initial_config=True) 
 
     """Begin the calculations algebrically"""
 
@@ -56,14 +62,13 @@ if __name__ == "__main__":
     print("\nMatrix:\n", matrix_g_numerical)
     print("\nPosition:\n", position_g_numerical)
 
+    #Calculate the forward kinematics with errors DH parameters applied:
+    matrix_ge_numerical, position_ge_numerical = robot.evaluate_param(matrix_g_e,apply_errors=True)
+    print("\nMatrix and position numerical with errors:(Book Validation)\n")
+    print("\nMatrix:\n", matrix_ge_numerical)
+    print("\nPosition:\n", position_ge_numerical)
     
-    #Validating the matrix:
-    for i in range(matrix_g_numerical.shape[0]):
-        for j in range(matrix_g_numerical.shape[1]):
-            print(f"\n Element ({i},{j}):", matrix_g_numerical[i,j], end=" ")
-    print("\n")
-    
-    #Calculate the forward kinematics without errors DH parameters applied:
+    #Calculate the forward kinematics with errors DH parameters applied:
     matrix_numerical, position_numerical = robot.evaluate_param(matrix_g,variable_values)
     print("\nMatrix and position numerical without errors:\n")
     print("\nMatrix:\n", matrix_numerical)
@@ -83,4 +88,6 @@ if __name__ == "__main__":
     print("\n Error values: \n", error)
         
     #Plot the robot:
+    #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#
     robot.plot_mechanism(variable_values, title ='Mechanism kinematics with and without errors')
+    
