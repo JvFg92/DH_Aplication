@@ -1,14 +1,9 @@
 """
-Code for the Denavit-Hartenberg (DH) parameters and forward kinematics. Developed by: João Vítor Franke Goetz.
-"""
 
-import sympy as sp
-import numpy as np
-import matplotlib.pyplot as plt
+Code for the Denavit-Hartenberg (DH) parameters and forward kinematics. Developed by: João Vítor Franke Goetz. 2025.
 
-"""
-Parameters example:
-Dh_param = [
+Parameters Input example:
+    Dh_param = [
         {'type': 'revolute', 'a':0, 'alpha': 0, 'd': 0,
          'errors': {'sigma': 0, 'beta': 0, 'epsilon': 0, 'phi': 0,}},
 
@@ -16,7 +11,7 @@ Dh_param = [
          'errors': {'sigma': 0, 'beta': 0, 'epsilon': 0, 'phi': 0,}}, 
     ]
 
-#To plot the robot, we need to provide the values of the variables. including other parameters that are not theta
+#To plot the robot and evaluate it, we need to provide the values of the variables. including other parameters that are not theta
     variable_values = {
     #Variables not provided in a first moment (Not defined in the Dh_param):
     Mechanism.a[0]: 150,           #a_0 for the first cylindrical joint 150mm
@@ -26,9 +21,50 @@ Dh_param = [
     Mechanism.theta[0]: sp.pi/12,   #theta_0 for the first cylindrical joint 15 degrees
     Mechanism.d[1]: 15,             #d_1 for the second Prismatic joint 45 degrees
     #...#
+    #Variables of errors:
+    Mechanism.epsilon[0]: 0.0,       #epsilon_0 for the first cylindrical joint
+    Mechanism.beta[1]: 0.0,       #epsilon_1 for the second Prismatic joint
+    #...#
     } 
 
+    Fuctions used:
+    robot = Mechanism(Dh_param)
+    #Create the robot with the DH parameters
+
+    robot.plot_mechanism(variable_values, title ='Your Title',initial_config=True)
+    #Plot the robot with the initial configuration
+
+    '''Begin the calculations algebrically'''
+    robot.forward_kinematics(False)
+    #Return the forward kinematics Matrix without errors
+
+    robot.forward_kinematics(True)
+    #Return the forward kinematics Matrix with errors apllied
+
+    '''Begin the calculations numerically'''
+    robot.evaluate_param(Matrix, variable_values)
+    #Return the numerical transformation matrix and position without errors
+
+    robot.evaluate_param(Matrix, variable_values, apply_errors=True)
+    #Return the numerical transformation matrix and position with errors
+
+    robot.get_joint_positions(variable_values, apply_errors=False)
+    #Return the joint positions for the mechanism in 3D without errors
+
+    robot.get_joint_positions(variable_values, apply_errors=True)
+    #Return the joint positions for the mechanism in 3D with errors
+
+    robot.evaluate_error(position_no_error, position_with_error)
+    #Return the error between two positions
+
+    robot.plot_mechanism(variable_values, title= 'Your Title', initial_config=False)
+    #Plot the robot with the initial configuration and the final configuration with and without errors
+
 """
+
+import sympy as sp
+import numpy as np
+import matplotlib.pyplot as plt
 
 class Mechanism:
     def __init__(self, param):
