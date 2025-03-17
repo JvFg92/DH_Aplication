@@ -1,6 +1,7 @@
 """
 
-Code for the Denavit-Hartenberg (DH) parameters and forward kinematics. Developed by: João Vítor Franke Goetz. 2025.
+Code for the Denavit-Hartenberg (DH) parameters and forward kinematics. 
+Developed by: João Vítor Franke Goetz. 2025.
 
 Parameters Input example:
     Dh_param = [
