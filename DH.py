@@ -48,12 +48,6 @@ Parameters Input example:
     robot.evaluate_param(Matrix, variable_values, apply_errors=True)
     #Return the numerical transformation matrix and position with errors
 
-    robot.get_joint_positions(variable_values, apply_errors=False)
-    #Return the joint positions for the mechanism in 3D without errors
-
-    robot.get_joint_positions(variable_values, apply_errors=True)
-    #Return the joint positions for the mechanism in 3D with errors
-
     robot.evaluate_error(position_no_error, position_with_error)
     #Return the error between two positions
 
@@ -92,7 +86,7 @@ class Mechanism:
             self.d.append(sp.Symbol(f'd_{i}'))
 
     def dh_matrix(self,i,apply_errors=False):
-      """Return the symbolic homogeneous matrix."""
+      """Return the symbolic homogeneous matrix. Internal Use"""
 
       #Nominal or error values
       a = self.a[i] + (self.sigma[i] if apply_errors else 0)
@@ -194,7 +188,7 @@ class Mechanism:
         return T_numerica, T_numerica[:3, 3]
     
     def get_joint_positions(self, variable_values, apply_errors=False):
-        """Return the joint positions for the mechanism in 3D."""
+        """Return the joint positions for the mechanism in 3D. Internal Use"""
         
         positions = [[0, 0, 0]] #Origin
         T = sp.eye(4)
@@ -212,6 +206,7 @@ class Mechanism:
             raise TypeError("Todos os símbolos devem ser substituídos por valores numéricos para plotagem")
     
     def evaluate_error(self, pos_no_error, pos_with_error):
+        """Return the error between two positions in 3D."""
         try:
             position_no_error = np.array([float(coord) for coord in pos_no_error])
             position_with_error = np.array([float(coord) for coord in pos_with_error])
@@ -227,7 +222,7 @@ class Mechanism:
         return error
 
     def plot_mechanism(self, variable_values=None, title=None, initial_config=False):
-
+        """Plot the mechanism in 3D with optional variable values."""
         #Create figure
         fig = plt.figure(figsize=(12, 5))
         ax = fig.add_subplot(111, projection='3d')
