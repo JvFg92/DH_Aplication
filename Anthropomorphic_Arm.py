@@ -90,5 +90,6 @@ if __name__ == "__main__":
     print("\n Error value: \n", error)
         
     #Plot the robot:
+    #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#
     robot.plot_mechanism(variable_values, title ='Mechanism kinematics with and without errors')
     

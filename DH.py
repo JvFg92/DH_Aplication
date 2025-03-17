@@ -52,6 +52,8 @@ Parameters Input example:
     robot.evaluate_error(position_no_error, position_with_error)
     #Return the error between two positions
 
+     #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#
+     
     robot.plot_mechanism(variable_values, title= 'Your Title', initial_config=False)
     #Plot the robot with the initial configuration and the final configuration with and without errors
 
