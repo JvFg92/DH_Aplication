@@ -18,6 +18,19 @@ if __name__ == "__main__":
     #Create the robot:
     robot = DH.Mechanism(Spherical_Arm)
     
+    #Evaluate the position of the effector using optional variable values:
+    """To plot the robot, we need to provide the values of the variables. including other parameters that are not 'theta' or 'd'"""
+    variable_values = {
+    #Variables not provided (Defined in the DH parameters, for plot eg):
+    robot.d[1]:     1,
+    #Variables of movement:
+    robot.theta[0]: 0.5,    #theta_0 for the first cylindrical joint
+    robot.theta[1]: 1.0,    #theta_1 for the second cylindrical joint   
+    robot.d[2]:     2.0     #d_2 for the prismatic joint
+    } 
+    
+    robot.plot_mechanism( title ='Manipulador em Estado Inicial',initial_config=True) 
+
     """Begin the calculations algebrically"""
 
     #Calculate the forward kinematics without errors:
@@ -35,48 +48,26 @@ if __name__ == "__main__":
 
     """Begin the calculations numerically:"""
 
-    #Calculate the forward kinematics without errors & DH parameters applied:
+    #Calculate the forward kinematics without errors DH parameters applied:
     matrix_g_numerical, position_g_numerical = robot.evaluate_param(matrix_g)
-    print("\nMatrix and position numerical without errors:\n")
+    print("\nMatrix and position numerical without errors:(Book Validation)\n")
     print("\nMatrix:\n", matrix_g_numerical)
     print("\nPosition:\n", position_g_numerical)
 
- 
-    #Validating the matrix:
-    for i in range(matrix_g_numerical.shape[0]):
-        for j in range(matrix_g_numerical.shape[1]):
-            print(f"\n Element ({i},{j}):", matrix_g_numerical[i,j], end=" ")
-    print("\n")
-
+    #Calculate the forward kinematics with errors DH parameters applied:
+    matrix_ge_numerical, position_ge_numerical = robot.evaluate_param(matrix_g_e,apply_errors=True)
+    print("\nMatrix and position numerical with errors:(Book Validation)\n")
+    print("\nMatrix:\n", matrix_ge_numerical)
+    print("\nPosition:\n", position_ge_numerical)
     
-    #Calculate the forward kinematics with errors & DH parameters applied:
-    matrix_g_numerical_e, position_g_numerical_e = robot.evaluate_param(matrix_g_e, apply_errors=True)
-    print("\nMatrix and position numerical with errors:\n")
-    print("Matrix:\n", matrix_g_numerical_e)
-    print("\nPosition:\n", position_g_numerical_e)
-    
-
-    """Start calculations numerically with optional variable values ​​(graphical example):"""
-    
-    #Evaluate the position of the effector using optional variable values:
-    """To plot the robot, we need to provide the values of the variables. including other parameters that are not 'theta' or 'd'"""
-    variable_values = {
-    #Variables not provided (Defined in the DH parameters, for plot eg):
-    robot.d[1]:     1,
-    #Variables of movement:
-    robot.theta[0]: 0.5,    #theta_0 for the first cylindrical joint
-    robot.theta[1]: 1.0,    #theta_1 for the second cylindrical joint   
-    robot.d[2]:     2.0     #d_2 for the prismatic joint
-    }    
-    
-    #Calculate the forward kinematics without errors DH parameters applied:
-    matrix_numerical, position_numerical = robot.evaluate_param(matrix_g)
+    #Calculate the forward kinematics with errors DH parameters applied:
+    matrix_numerical, position_numerical = robot.evaluate_param(matrix_g,variable_values)
     print("\nMatrix and position numerical without errors:\n")
     print("\nMatrix:\n", matrix_numerical)
     print("\nPosition:\n", position_numerical)
 
     #Calculate the forward kinematics with errors DH parameters applied:
-    matrix_numerical_e, position_numerical_e = robot.evaluate_param(matrix_g_e, apply_errors=True)
+    matrix_numerical_e, position_numerical_e = robot.evaluate_param(matrix_g_e, variable_values, apply_errors=True)
     print("\nMatrix and position numerical with errors:\n")
     print("Matrix:\n", matrix_numerical_e)
     print("\nPosition:\n", position_numerical_e)
@@ -85,12 +76,9 @@ if __name__ == "__main__":
     print("\n [X, Y, Z] position values:")
     print("Position without erros: \n", [p for p in position_numerical])
     print("Position with errors: \n", [p for p in position_numerical_e])
-    error = [0, 0, 0]
-    for i in range(3):
-        error[i] = position_numerical_e[i] - position_numerical[i]
-    print("\n [X, Y, Z] error values:")
-    print("\n \n", error)
+    error=robot.evaluate_error(position_numerical, position_numerical_e)
+    print("\n Error values: \n", error)
         
     #Plot the robot:
+    #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#
     robot.plot_mechanism(variable_values, title ='Mechanism kinematics with and without errors')
-    
