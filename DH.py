@@ -224,13 +224,20 @@ class Mechanism:
         error = np.linalg.norm(position_no_error - position_with_error)
         return error
 
-    def plot_mechanism(self, variable_values=None, title=None, initial_config=False):
-        """Plot the mechanism in 3D with optional variable values."""
-        #Create figure
-        fig = plt.figure(figsize=(12, 5))
-        ax = fig.add_subplot(111, projection='3d')
+    def plot_mechanism(self, variable_values=None, title=None, initial_config=False, plot_type='3d'):
+        """Plot the mechanism in 2D or 3D based on user choice with optional variable values."""
+        # Validate plot_type
+        if plot_type not in ['2d', '3d']:
+            raise ValueError("plot_type must be '2d' or '3d'")
 
-        #Define initial configuration values (theta = 0, d = 0, a = 0 where applicable)
+        # Create figure
+        if plot_type == '3d':
+            fig = plt.figure(figsize=(12, 5))
+            ax = fig.add_subplot(111, projection='3d')
+        else:  # plot_type == '2d'
+            fig, ax = plt.subplots(figsize=(10, 10))
+
+        # Define initial configuration values (theta = 0, d = 0, a = 0 where applicable)
         initial_values = {}
         for i, params in enumerate(self.param):
             if 'theta' not in params:
@@ -241,29 +248,33 @@ class Mechanism:
                 initial_values[self.alpha[i]] = 0
             if 'd' not in params:
                 initial_values[self.d[i]] = 0
-            #Ensure errors are zero for initial config
+            # Ensure errors are zero for initial config
             initial_values[self.phi[i]] = 0
             initial_values[self.epsilon[i]] = 0
             initial_values[self.sigma[i]] = 0
             initial_values[self.beta[i]] = 0
         
-        #Calculate initial configuration
+        # Calculate initial configuration
         try:
             positions_initial = self.get_joint_positions(initial_values, apply_errors=False)
         except TypeError as e:
             raise TypeError("Could not compute initial configuration") from e
 
         if initial_config:
-            #Plot only initial configuration, optionally with variable_values
+            # Plot only initial configuration, optionally with variable_values
             if variable_values:
                 try:
                     positions_initial = self.get_joint_positions(variable_values, apply_errors=False)
                 except TypeError as e:
                     raise TypeError("Could not apply variable values to initial configuration") from e
-            ax.plot(positions_initial[:, 0], positions_initial[:, 1], positions_initial[:, 2], 
-                    'm-o', label='Initial Configuration')
+            
+            if plot_type == '3d':
+                ax.plot(positions_initial[:, 0], positions_initial[:, 1], positions_initial[:, 2], 
+                        'm-o', label='Initial Configuration')
+            else:  # 2d
+                ax.plot(positions_initial[:, 0], positions_initial[:, 1], 'm-o', label='Initial Configuration')
         else:
-            #Calculate full kinematics with provided variable_values
+            # Calculate full kinematics with provided variable_values
             try:
                 joints_no_error = self.get_joint_positions(variable_values, apply_errors=False)
                 joints_with_error = self.get_joint_positions(variable_values, apply_errors=True)
@@ -273,24 +284,41 @@ class Mechanism:
             except TypeError as e:
                 raise TypeError("Could not convert values") from e
             
-            #Plot all configurations
-            ax.plot(positions_initial[:, 0], positions_initial[:, 1], positions_initial[:, 2], 
-                    'm-o', label='Initial Configuration')
-            ax.plot(joints_no_error[:, 0], joints_no_error[:, 1], joints_no_error[:, 2], 
-                    'b-o', label='Without errors')
-            ax.plot(joints_with_error[:, 0], joints_with_error[:, 1], joints_with_error[:, 2], 
-                    'r--o', label='With errors')
-            ax.quiver(
-                pos_no_error[0], pos_no_error[1], pos_no_error[2],
-                error_vector[0], error_vector[1], error_vector[2],
-                color='g', linewidth=2, label='Error vector'
-            )
+            if plot_type == '3d':
+                # 3D Plot
+                ax.plot(positions_initial[:, 0], positions_initial[:, 1], positions_initial[:, 2], 
+                        'm-o', label='Initial Configuration')
+                ax.plot(joints_no_error[:, 0], joints_no_error[:, 1], joints_no_error[:, 2], 
+                        'b-o', label='Without errors')
+                ax.plot(joints_with_error[:, 0], joints_with_error[:, 1], joints_with_error[:, 2], 
+                        'r--o', label='With errors')
+                ax.quiver(
+                    pos_no_error[0], pos_no_error[1], pos_no_error[2],
+                    error_vector[0], error_vector[1], error_vector[2],
+                    color='g', linewidth=2, label='Error vector'
+                )
+            else:  # 2d
+                # 2D Plot (XY plane)
+                ax.plot(positions_initial[:, 0], positions_initial[:, 1], 'm-o', label='Initial Configuration')
+                ax.plot(joints_no_error[:, 0], joints_no_error[:, 1], 'b-o', label='Without errors')
+                ax.plot(joints_with_error[:, 0], joints_with_error[:, 1], 'r--o', label='With errors')
+                ax.quiver(
+                    pos_no_error[0], pos_no_error[1],
+                    error_vector[0], error_vector[1],
+                    color='g', label='Error vector'
+                )
+
+        # Common plot settings
+        ax.set_xlabel('X (mm)')
+        ax.set_ylabel('Y (mm)')
+        if plot_type == '3d':
+            ax.set_zlabel('Z (mm)')
+            ax.set_title(title if title else 'Mechanism Plot (3D)')
+            ax.view_init(elev=20, azim=45)
+        else:
+            ax.set_title(title if title else 'Mechanism Plot (2D - XY Plane)')
+            ax.axis('equal')  # Maintain aspect ratio in 2D
+            ax.grid(True)
         
-        #Common plot settings
-        ax.set_xlabel('X')
-        ax.set_ylabel('Y')
-        ax.set_zlabel('Z')
-        ax.set_title(title if title else 'Mechanism Plot')
         ax.legend()
-        ax.view_init(elev=20, azim=45)
         plt.show()

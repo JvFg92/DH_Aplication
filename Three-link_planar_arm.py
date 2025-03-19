@@ -37,7 +37,7 @@ if __name__ == "__main__":
     robot.phi[2]: 0.0,           #phi_2 for the third cylindrical joint
     } 
 
-    robot.plot_mechanism( title ='Manipulador em Estado Inicial',initial_config=True) 
+    robot.plot_mechanism( title ='Manipulador em Estado Inicial',initial_config=True, plot_type= '2d') 
 
     """Begin the calculations algebrically"""
 
@@ -89,5 +89,5 @@ if __name__ == "__main__":
         
     #Plot the robot:
     #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#
-    robot.plot_mechanism(variable_values, title ='Mechanism kinematics with and without errors')
+    robot.plot_mechanism(variable_values, title ='Mechanism kinematics with and without errors', plot_type= '2d')
     
