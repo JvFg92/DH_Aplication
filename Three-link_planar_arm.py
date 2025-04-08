@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     } 
 
-    robot.plot_mechanism( title ='Manipulador em Estado Inicial',initial_config=True, plot_type= '2d') 
+    #robot.plot_mechanism( title ='Manipulador em Estado Inicial',initial_config=True, plot_type= '2d') 
 
     """Begin the calculations algebrically"""
 

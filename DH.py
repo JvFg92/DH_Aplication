@@ -200,7 +200,12 @@ class Mechanism:
         
         #Substitute values into the transformation matrix
         T_numerica = T.subs(subs_dict)
-        return T_numerica, T_numerica[:3, 3]
+        if(variable_values):
+            T_numerica_eval = np.array(T_numerica, dtype=float)
+            position_eval = T_numerica_eval[:3, 3]  # Extract position as numerical array
+            return T_numerica_eval, position_eval
+        else:
+            return T_numerica, T_numerica[:3, 3]  # Return symbolic matrix and position
     
     def get_joint_positions(self, variable_values, apply_errors=False):
         """Return the joint positions for the mechanism in 3D. Internal Use"""
