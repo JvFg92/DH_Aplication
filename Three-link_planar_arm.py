@@ -18,7 +18,7 @@ if __name__ == "__main__":
     #Create the robot:
     robot = DH.Mechanism(Three_link_planar_arm)
         
-    #To plot the robot, we need to provide the values of the variables. including other parameters that are not theta
+    #To plot the robot, we need to provide the values of the variables. Including other parameters that are not theta
     variable_values = {
     #Variables not provided firstly:
     
@@ -52,28 +52,34 @@ if __name__ == "__main__":
     """Begin the calculations numerically:"""
 
     #Calculate the forward kinematics without errors DH parameters applied:
-    matrix_g_numerical, position_g_numerical = robot.evaluate_param(matrix_g)
+    matrix_g_numerical, position_g_numerical, orientation_g_numerical = robot.evaluate_param(matrix_g)
     print("\nMatrix and position numerical without errors:(Book Validation)\n")
     print("\nMatrix:\n", matrix_g_numerical)
     print("\nPosition:\n", position_g_numerical)
+    print("\nOrientation:\n", orientation_g_numerical)
 
     #Calculate the forward kinematics with errors DH parameters applied:
-    matrix_ge_numerical, position_ge_numerical = robot.evaluate_param(matrix_g_e,apply_errors=True)
+    matrix_ge_numerical, position_ge_numerical, orientation_ge_numerical = robot.evaluate_param(matrix_g_e,apply_errors=True)
     print("\nMatrix and position numerical with errors:(Book Validation)\n")
     print("\nMatrix:\n", matrix_ge_numerical)
     print("\nPosition:\n", position_ge_numerical)
+    print("\nOrientation:\n", orientation_ge_numerical)
+
+    '''Results for research purposes'''
     
     #Calculate the forward kinematics with errors DH parameters applied:
-    matrix_numerical, position_numerical = robot.evaluate_param(matrix_g,variable_values)
+    matrix_numerical, position_numerical, orientation_numerical = robot.evaluate_param(matrix_g,variable_values)
     print("\nMatrix and position numerical without errors:\n")
     print("\nMatrix:\n", matrix_numerical)
     print("\nPosition:\n", position_numerical)
+    print("\Orientation:\n", orientation_numerical)
 
     #Calculate the forward kinematics with errors DH parameters applied:
-    matrix_numerical_e, position_numerical_e = robot.evaluate_param(matrix_g_e, variable_values, apply_errors=True)
+    matrix_numerical_e, position_numerical_e, orientation_numerical_e = robot.evaluate_param(matrix_g_e, variable_values, apply_errors=True)
     print("\nMatrix and position numerical with errors:\n")
     print("Matrix:\n", matrix_numerical_e)
     print("\nPosition:\n", position_numerical_e)
+    print("\Orientation:\n", orientation_numerical_e)
 
     #Calculate error values:
     print("\n [X, Y, Z] position values:")
@@ -81,10 +87,6 @@ if __name__ == "__main__":
     print("Position with errors: \n", [p for p in position_numerical_e])
     error=robot.evaluate_error(position_numerical, position_numerical_e)
     print("\n Error value in mm: \n", error)
-
-    #Get the orientation of the robot:
-    print("\n Orientation: \n", robot.get_orintation(position_numerical))
-    print("\n Orientation with error: \n", robot.get_orintation(position_numerical_e))
         
     #Plot the robot:
     #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#

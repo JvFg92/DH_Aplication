@@ -127,18 +127,6 @@ class Mechanism:
         position = T[:3, 3]
         return T, position
     
-    def get_orintation(self, T):
-        """Return the orientation of the end effector."""
-        # Extract rotation matrix from the transformation matrix        
-        R = T[:3, :3]
-        # Calculate the Euler angles (roll, pitch, yaw) from the rotation matrix
-        #roll = sp.atan2(R[2, 1], R[2, 2])
-        #pitch = sp.atan2(-R[2, 0], sp.sqrt(R[2, 1]**2 + R[2, 2]**2))
-        #yaw = sp.atan2(R[1, 0], R[0, 0])
-
-        return R #,roll, pitch, yaw
-        
-    
     def evaluate_param(self, T, variable_values=None, apply_errors=False):
         """Return the numerical transformation matrix and position."""
 
@@ -202,10 +190,11 @@ class Mechanism:
         T_numerica = T.subs(subs_dict)
         if(variable_values):
             T_numerica_eval = np.array(T_numerica, dtype=float)
-            position_eval = T_numerica_eval[:3, 3]  # Extract position as numerical array
-            return T_numerica_eval, position_eval
+            position_eval = T_numerica_eval[:3, 3]
+            orientation_eval = T_numerica_eval[:3, :3]
+            return T_numerica_eval, position_eval, orientation_eval
         else:
-            return T_numerica, T_numerica[:3, 3]  # Return symbolic matrix and position
+            return T_numerica, T_numerica[:3, 3], T_numerica[:3, :3]  # Return symbolic matrix, position and orientation
     
     def get_joint_positions(self, variable_values, apply_errors=False):
         """Return the joint positions for the mechanism in 3D. Internal Use"""
@@ -214,7 +203,7 @@ class Mechanism:
         T = sp.eye(4)
         for i in range(self.n_joints):
             T = T * self.dh_matrix(i, apply_errors)
-            T_eval, pos_eval = self.evaluate_param(T, variable_values, apply_errors)
+            T_eval, pos_eval, orientation = self.evaluate_param(T, variable_values, apply_errors)
             positions.append(pos_eval)
         
         #Try to convert all positions to float, raising an error if any symbol is left
