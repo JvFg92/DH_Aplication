@@ -5,14 +5,14 @@ if __name__ == "__main__":
     
     #Define the DH parameters:(Three-link planar arm)
     Three_link_planar_arm = [
-        {'type': 'revolute', 'a': 80, 'alpha': 0, 'd': 5, 
-         'errors': {'sigma': 0.5, 'beta': 0.017453 ,}},
-
         {'type': 'revolute', 'a': 80, 'alpha': 0, 'd': 0,
-         'errors': {'sigma': 0.5, 'beta': 0.017453 ,}},
+         'errors': {'sigma': 1.025, 'beta': 0, 'epsilon': 0, 'phi': 0,}},
+
+        {'type': 'revolute', 'a': 60, 'alpha': 0, 'd': 0,
+         'errors': {'sigma': 1.025, 'beta': 0, 'epsilon': 0, 'phi': 0,}},
          
-        {'type': 'revolute', 'a': 0, 'alpha': 0, 'd': 0, 
-        'errors': {'sigma': 0.5, 'beta': 0.017453 ,}},
+        {'type': 'revolute', 'a': 40, 'alpha': 0, 'd': 0, 
+         'errors': {'sigma': 1.025, 'beta': 0, 'epsilon': 0, 'phi': 0,}},
     ]
     
     #Create the robot:
@@ -25,16 +25,11 @@ if __name__ == "__main__":
         
     #Variables of movement:
     robot.theta[0]: (sp.pi/12),   #theta_0 for the first cylindrical joint 15 degrees
-    robot.theta[1]: (sp.pi/4),    #theta_1 for the second cylindrical joint 45 degrees
-    robot.theta[2]: (sp.pi/3),    #theta_2 for the third cylindrical joint 60 degrees
+    robot.theta[1]: (sp.pi/6),    #theta_1 for the second cylindrical joint 30 degrees
+    robot.theta[2]: (sp.pi/4),    #theta_2 for the third cylindrical joint 45 degrees
 
     #Variables of errors:
-    robot.epsilon[0]: 0.0,       #epsilon_0 for the first cylindrical joint
-    robot.epsilon[1]: 0.0,       #epsilon_1 for the second cylindrical joint
-    robot.epsilon[2]: 0.0,       #epsilon_2 for the third cylindrical joint
-    robot.phi[0]: 0.0,           #phi_0 for the first cylindrical joint
-    robot.phi[1]: 0.0,           #phi_1 for the second cylindrical joint
-    robot.phi[2]: 0.0,           #phi_2 for the third cylindrical joint
+
     } 
 
     robot.plot_mechanism( title ='Manipulador em Estado Inicial',initial_config=True, plot_type= '2d') 
@@ -85,7 +80,11 @@ if __name__ == "__main__":
     print("Position without erros: \n", [p for p in position_numerical])
     print("Position with errors: \n", [p for p in position_numerical_e])
     error=robot.evaluate_error(position_numerical, position_numerical_e)
-    print("\n Error values: \n", error)
+    print("\n Error value in mm: \n", error)
+
+    #Get the orientation of the robot:
+    print("\n Orientation: \n", robot.get_orintation(position_numerical))
+    print("\n Orientation with error: \n", robot.get_orintation(position_numerical_e))
         
     #Plot the robot:
     #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#

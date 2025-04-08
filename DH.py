@@ -127,6 +127,18 @@ class Mechanism:
         position = T[:3, 3]
         return T, position
     
+    def get_orintation(self, T):
+        """Return the orientation of the end effector."""
+        # Extract rotation matrix from the transformation matrix        
+        R = T[:3, :3]
+        # Calculate the Euler angles (roll, pitch, yaw) from the rotation matrix
+        #roll = sp.atan2(R[2, 1], R[2, 2])
+        #pitch = sp.atan2(-R[2, 0], sp.sqrt(R[2, 1]**2 + R[2, 2]**2))
+        #yaw = sp.atan2(R[1, 0], R[0, 0])
+
+        return R #,roll, pitch, yaw
+        
+    
     def evaluate_param(self, T, variable_values=None, apply_errors=False):
         """Return the numerical transformation matrix and position."""
 
