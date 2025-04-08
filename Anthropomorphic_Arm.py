@@ -51,7 +51,7 @@ if __name__ == "__main__":
     """Begin the calculations numerically:"""
 
     #Calculate the forward kinematics without errors DH parameters applied:
-    matrix_g_numerical, position_g_numerical = robot.evaluate_param(matrix_g)
+    matrix_g_numerical, position_g_numerical, orientation_g_numerical = robot.evaluate_param(matrix_g)
     print("\nMatrix and position numerical without errors:(Book Validation)\n")
     
     #Validating the matrix:
@@ -61,26 +61,30 @@ if __name__ == "__main__":
     print("\n")
 
     print("\nPosition:\n", position_g_numerical)
+    print("\nOrientation:\n", orientation_g_numerical)
 
     #Calculate the forward kinematics with errors DH parameters applied:
-    matrix_g_numerical_e, position_g_numerical_e = robot.evaluate_param(matrix_g_e, apply_errors=True)
+    matrix_g_numerical_e, position_g_numerical_e, orientation_g_numerical_e = robot.evaluate_param(matrix_g_e, apply_errors=True)
     print("\nMatrix and position numerical with errors:\n")
     print("Matrix:\n", matrix_g_numerical_e)
     print("\nPosition:\n", position_g_numerical_e)
+    print("\nOrientation:\n", orientation_g_numerical_e)
 
     """Start calculations numerically with optional variable values ​​(graphical example):"""
 
     #Calculate the forward kinematics without errors DH parameters applied:
-    matrix_numerical, position_numerical = robot.evaluate_param(matrix_g,variable_values)
+    matrix_numerical, position_numerical, orientation_numerical = robot.evaluate_param(matrix_g,variable_values)
     print("\nMatrix and position numerical without errors:\n")
     print("\nMatrix:\n", matrix_numerical)
     print("\nPosition:\n", position_numerical)
+    print("\nOrientation:\n", orientation_numerical)
 
     #Calculate the forward kinematics with errors DH parameters applied:
-    matrix_numerical_e, position_numerical_e = robot.evaluate_param(matrix_g_e, variable_values, apply_errors=True)
+    matrix_numerical_e, position_numerical_e, orientation_numerical_e = robot.evaluate_param(matrix_g_e, variable_values, apply_errors=True)
     print("\nMatrix and position numerical with errors:\n")
     print("Matrix:\n", matrix_numerical_e)
     print("\nPosition:\n", position_numerical_e)
+    print("\nOrientation:\n", orientation_numerical_e)
 
     #Calculate error values:
     print("\n [X, Y, Z] position values:")

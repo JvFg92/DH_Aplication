@@ -44,10 +44,10 @@ Parameters Input example:
 
     '''Begin the calculations numerically'''
     robot.evaluate_param(Matrix, variable_values)
-    #Return the numerical transformation matrix and position without errors
+    #Return the numerical transformation matrix, position and orientation without errors
 
     robot.evaluate_param(Matrix, variable_values, apply_errors=True)
-    #Return the numerical transformation matrix and position with errors
+    #Return the numerical transformation matrix, position and orientation with errors
 
     robot.evaluate_error(position_no_error, position_with_error)
     #Return the error between two positions
