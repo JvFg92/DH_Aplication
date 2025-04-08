@@ -123,11 +123,25 @@ Essa matriz apresenta os termos trigonométricos expandidos, mas é matematicame
   = $$\( a_1sin(\theta_1) + a_2 [sin(\theta_1)cos(\theta_2) + cos(\theta_1)sin(\theta_2)] \)$$  
   = $$\( a_1sin(\theta_1) + a_2sin(\theta_1 + \theta_2) \)$$
 
+## **Matriz de erros / *Errors Matrix*:**
 
-
-## **Trajetória calculada / *Calculated trajectory*:**
-
-![image](https://github.com/user-attachments/assets/903c9679-f460-4f5c-b5fe-55307f81f451)
+$$
+T_e' = \begin{bmatrix}
+(-\sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) + \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \cos(\phi_2 + \theta_2) + ( \sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) - \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) ) \sin(\phi_2 + \theta_2) ) &
+(- ( -\sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) + \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\phi_2 + \theta_2) \cos(\alpha_2 + \beta_2) + ( \sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) - \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) ) \cos(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) + ( \sin(\alpha_0 + \beta_0) \sin(\phi_0 + \theta_0) \cos(\alpha_1 + \beta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_1 + \theta_1) \cos(\phi_0 + \theta_0) ) \sin(\alpha_2 + \beta_2) ) &
+( ( -\sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) + \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\alpha_2 + \beta_2) \sin(\phi_2 + \theta_2) - ( \sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) - \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) ) \sin(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) + ( \sin(\alpha_0 + \beta_0) \sin(\phi_0 + \theta_0) \cos(\alpha_1 + \beta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_1 + \theta_1) \cos(\phi_0 + \theta_0) ) \cos(\alpha_2 + \beta_2) ) &
+( (a_0 + \sigma_0) \cos(\phi_0 + \theta_0) - (a_1 + \sigma_1) \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) + (a_1 + \sigma_1) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + (a_2 + \sigma_2) ( -\sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) + \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \cos(\phi_2 + \theta_2) + (a_2 + \sigma_2) ( \sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) - \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) ) \sin(\phi_2 + \theta_2) + (d_1 + \epsilon_1) \sin(\alpha_0 + \beta_0) \sin(\phi_0 + \theta_0) + (d_2 + \epsilon_2) ( \sin(\alpha_0 + \beta_0) \sin(\phi_0 + \theta_0) \cos(\alpha_1 + \beta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_1 + \theta_1) \cos(\phi_0 + \theta_0) ) ) \\
+( ( \sin(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) ) \cos(\phi_2 + \theta_2) + ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\phi_2 + \theta_2) ) &
+( - ( \sin(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) ) \sin(\phi_2 + \theta_2) \cos(\alpha_2 + \beta_2) + ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \cos(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) + ( -\sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) - \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\alpha_2 + \beta_2) ) &
+( ( \sin(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) ) \sin(\alpha_2 + \beta_2) \sin(\phi_2 + \theta_2) - ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) + ( -\sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) - \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \cos(\alpha_2 + \beta_2) ) &
+( (a_0 + \sigma_0) \sin(\phi_0 + \theta_0) + (a_1 + \sigma_1) \sin(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + (a_1 + \sigma_1) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) + (a_2 + \sigma_2) ( \sin(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) ) \cos(\phi_2 + \theta_2) + (a_2 + \sigma_2) ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\phi_2 + \theta_2) - (d_1 + \epsilon_1) \sin(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) + (d_2 + \epsilon_2) ( -\sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) - \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) ) \\
+( ( \sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) ) \sin(\phi_2 + \theta_2) + \sin(\alpha_0 + \beta_0) \sin(\phi_1 + \theta_1) \cos(\phi_2 + \theta_2) ) &
+( ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) ) \sin(\alpha_2 + \beta_2) + ( \sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) ) \cos(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) - \sin(\alpha_0 + \beta_0) \sin(\phi_1 + \theta_1) \sin(\phi_2 + \theta_2) \cos(\alpha_2 + \beta_2) ) &
+( ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) ) \cos(\alpha_2 + \beta_2) - ( \sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) ) \sin(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) + \sin(\alpha_0 + \beta_0) \sin(\alpha_2 + \beta_2) \sin(\phi_1 + \theta_1) \sin(\phi_2 + \theta_2) ) &
+( d_0 + \epsilon_0 + (a_1 + \sigma_1) \sin(\alpha_0 + \beta_0) \sin(\phi_1 + \theta_1) + (a_2 + \sigma_2) ( \sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) ) \sin(\phi_2 + \theta_2) + (a_2 + \sigma_2) \sin(\alpha_0 + \beta_0) \sin(\phi_1 + \theta_1) \cos(\phi_2 + \theta_2) + (d_1 + \epsilon_1) \cos(\alpha_0 + \beta_0) + (d_2 + \epsilon_2) ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) ) ) \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
 
 
 ## **Parâmetros utilizados / *Used Parameters*:**
@@ -140,12 +154,19 @@ Essa matriz apresenta os termos trigonométricos expandidos, mas é matematicame
 
 
 
-
 | Joint (i) | $\phi$ᵢ (rad) | $\epsilon$ᵢ (mm)  | $\sigma$ᵢ (mm) | αᵢ (rad) |
 |-----------|---------:|--------:|-------:|---------:|
 | 1         |   0.001    |    0.02   |   0.01    |    0.0003     |
 | 2         |   0.005    |    0.04   |   0.05    |    0.0006     |
 | 3         |   0.015    |    0.06   |   0.10    |    0.0009     |
+
+## **Trajetória calculada / *Calculated trajectory*:**
+
+![image](https://github.com/user-attachments/assets/903c9679-f460-4f5c-b5fe-55307f81f451)
+
+
+## **Erro Modular Calculado / *Calculated Modular Error*:**
+Error = 0.3794356098314992 mm
 
 
 ### Referência usada / Reference used: 
