@@ -1,18 +1,67 @@
 import sympy as sp
 import DH 
 
+"""
+Erros Used in the code: (Note that the variation 6 is equal to 8, and 7 is equal to 9)
+Simulation 1: Error value in mm: 0.0
+'errors': {'sigma': 0, 'beta': 0, 'epsilon': 0, 'phi': 0,}
+'errors': {'sigma': 0, 'beta': 0, 'epsilon': 0, 'phi': 0,}
+'errors': {'sigma': 0, 'beta': 0, 'epsilon': 0, 'phi': 0,}
+
+Simulation 2: Error value in mm: 3.0800489207509347
+'errors': {'sigma': 1.02469, 'beta': 0.0181, 'epsilon': 0, 'phi': 0,}
+'errors': {'sigma': 0.76852, 'beta': 0.0375, 'epsilon': 0, 'phi': 0,}
+'errors': {'sigma': 0.51235, 'beta': 0.0375, 'epsilon': 0, 'phi': 0,}
+
+Simulation 3: Error value in mm: 3.0512479624576576
+'errors': {'sigma': -1.02469, 'beta': -0.0181, 'epsilon': -0, 'phi': 0,}
+'errors': {'sigma': -0.76852, 'beta': -0.0375, 'epsilon': -0, 'phi': 0,}
+'errors': {'sigma': -0.51235, 'beta': -0.0375, 'epsilon': -0, 'phi': 0,}
+
+Simulation 4: Error value in mm: 3.333939511877638
+'errors': {'sigma': 1.02469, 'beta': 0.0195, 'epsilon': 0, 'phi': 0,}
+'errors': {'sigma': 0.76852, 'beta': 0.0403, 'epsilon': 0, 'phi': 0,}
+'errors': {'sigma': 0.51235, 'beta': 0.0403, 'epsilon': 0, 'phi': 0,}
+
+Simulation 5: Error value in mm: 3.292746278474046
+'errors': {'sigma': -1.02469, 'beta': -0.0195, 'epsilon': -0, 'phi': 0,}
+'errors': {'sigma': -0.76852, 'beta': -0.0403, 'epsilon': -0, 'phi': 0,}
+'errors': {'sigma': -0.51235, 'beta': -0.0403, 'epsilon': -0, 'phi': 0,}
+
+Simulation 6 (B11-B12): Error value in mm: 2.3595939580544205 
+'errors': {'sigma': 1.02469, 'beta': 0.0181, 'epsilon': 0, 'phi': 0,}
+'errors': {'sigma': 0.76852, 'beta': -0.0013, 'epsilon': 0, 'phi': 0,}
+'errors': {'sigma': 0.51235, 'beta': -0.0013, 'epsilon': 0, 'phi': 0,}
+
+Simulation 7 -(B11-B12): Error value in mm: 2.389722425294341
+'errors': {'sigma': -1.02469, 'beta': -0.0181, 'epsilon': -0, 'phi': 0,}
+'errors': {'sigma': -0.76852, 'beta': 0.0013, 'epsilon': -0, 'phi': 0,}
+'errors': {'sigma': -0.51235, 'beta': 0.0013, 'epsilon': -0, 'phi': 0,}
+
+Simulation 8 (B21-B22): Error value in mm: 2.3595939580544205  
+'errors': {'sigma': 1.02469, 'beta': 0.0181, 'epsilon': 0, 'phi': 0,}
+'errors': {'sigma': 0.76852, 'beta': -0.0013, 'epsilon': 0, 'phi': 0,}
+'errors': {'sigma': 0.51235, 'beta': -0.0013, 'epsilon': 0, 'phi': 0,}
+
+Simulation 9 -(B11-B12): Error value in mm: 2.389722425294341
+'errors': {'sigma': -1.02469, 'beta': -0.0181, 'epsilon': -0, 'phi': 0,}
+'errors': {'sigma': -0.76852, 'beta': 0.0013,  'epsilon': -0, 'phi': 0,}
+'errors': {'sigma': -0.51235, 'beta': 0.0013,  'epsilon': -0, 'phi': 0,}
+
+"""
+
 if __name__ == "__main__":
     
-    #Define the DH parameters:(Three-link planar arm)
+    #Define the DH parameters:(Three-link planar arm) 1,2,3,4,5,6,7
     Three_link_planar_arm = [
         {'type': 'revolute', 'a': 80, 'alpha': 0, 'd': 0,
-         'errors': {'sigma': 1.025, 'beta': 0, 'epsilon': 0, 'phi': 0,}},
+         'errors': {'sigma': 1.02469, 'beta': 0.0195, 'epsilon': 0, 'phi': 0,}},
 
         {'type': 'revolute', 'a': 60, 'alpha': 0, 'd': 0,
-         'errors': {'sigma': 1.025, 'beta': 0, 'epsilon': 0, 'phi': 0,}},
+         'errors': {'sigma': 0.76852, 'beta': 0.0403, 'epsilon': 0, 'phi': 0,}},
          
         {'type': 'revolute', 'a': 40, 'alpha': 0, 'd': 0, 
-         'errors': {'sigma': 1.025, 'beta': 0, 'epsilon': 0, 'phi': 0,}},
+         'errors': {'sigma': 0.51235, 'beta': 0.0403, 'epsilon': 0, 'phi': 0,}},
     ]
     
     #Create the robot:
@@ -72,14 +121,14 @@ if __name__ == "__main__":
     print("\nMatrix and position numerical without errors:\n")
     print("\nMatrix:\n", matrix_numerical)
     print("\nPosition:\n", position_numerical)
-    print("\Orientation:\n", orientation_numerical)
+    print("\nOrientation:\n", orientation_numerical)
 
     #Calculate the forward kinematics with errors DH parameters applied:
     matrix_numerical_e, position_numerical_e, orientation_numerical_e = robot.evaluate_param(matrix_g_e, variable_values, apply_errors=True)
     print("\nMatrix and position numerical with errors:\n")
     print("Matrix:\n", matrix_numerical_e)
     print("\nPosition:\n", position_numerical_e)
-    print("\Orientation:\n", orientation_numerical_e)
+    print("\nOrientation:\n", orientation_numerical_e)
 
     #Calculate error values:
     print("\n [X, Y, Z] position values:")
