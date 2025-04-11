@@ -4,7 +4,8 @@ Desenvolvimento:
 - DH.py:
   - Cálculo da cinemática direta (com e sem erros de geometria aplicados às juntas) algebricamente e numericamente;
   - Cálculo de erro de trajetória;
-  - Definição das coordenadas do efetuador final;
+  - Definição das coordenadas e orientação do efetuador final;
+  - Definição dos ângulos de Euler para orientação;
   - Plotagem gráfica do mecanismo após movimentação das juntas;
 
 - Anthropomorphic_Arm.py:
@@ -27,7 +28,8 @@ Development:
 - DH.py:
   - Calculation of direct kinematics (with and without geometry errors applied to the joints) algebraically and numerically;
   - Trajectory error calculation;
-  - Definition of end effector coordinates;
+  - Definition of end effector coordinates and orientation;
+  - Definition of Euler angles for orientation;
   - Graphical plotting of the mechanism after joint movement;
 
 - Anthropomorphic_Arm.py:
@@ -86,7 +88,7 @@ Essa matriz apresenta os termos trigonométricos expandidos, mas é matematicame
 
 *This matrix has the expanded trigonometric terms, but is mathematically equivalent to the manually calculated matrix after simplification.*
 
-# Simplificação do resultado / *Result simplification*:
+### Simplificação do resultado / *Result simplification*:
 
 - **T'(0,0):** $$\(-sin(\theta_1)sin(\theta_2)cos(\theta_0) + cos(\theta_0)cos(\theta_1)cos(\theta_2)\)$$  
   = $$\( cos(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)$$  
@@ -164,10 +166,42 @@ $$
 
 ![image](https://github.com/user-attachments/assets/903c9679-f460-4f5c-b5fe-55307f81f451)
 
+## **Matriz Transformação Cinemática / *Kinematic Transformation Matrix*:**
+
+### **Sem erros / *withot errors*:**
+
+$$
+A' = \begin{bmatrix}
+0.22713508 & -0.84767966 & 0.47942554 & 14.00038483  \\
+0.12408446 & -0.46308951 & -0.87758256 & 7.64844509 \\
+0.96592583 & 0.25881905 & 0        & 21.55995521  \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+
+
+### **Com erros / *With errors*:**
+
+$$
+A' = \begin{bmatrix}
+2.10310063e-01  & -8.50871689e-01 &  4.81442671e-014 & 1.38208681e+01  \\
+1.14483169e-01  & -4.67633968e-01 & -8.76477082e-01  & 7.44156283e+00  \\
+9.70908482e-01  &  2.39449033e-01 & -9.37641832e-04  & 2.18225287e+01  \\
+0 & 0 & 0 & 1
+\end{bmatrix}
+$$
+
+
 
 ## **Erro Modular Calculado / *Calculated Modular Error*:**
 Error = 0.3794356098314992 mm
 
+## **Ângulos de Euler / *Euler Anlges*:**
+
+Yaw(X),Pitch(Y),Roll(Z)
+-  Without errors:  $(\pi/2, -1.30899693899575, 0.500000000000000)$
+
+-  With errors:  $(-1.56688051629514 + pi, -1.32899609966771, 0.498498303670928)$
 
 ### Referência usada / Reference used: 
 [Robotics: Modelling, Planning and Control; Sciavicco, et al. 2009](https://link.springer.com/book/10.1007/978-1-84628-642-1)
