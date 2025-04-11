@@ -52,6 +52,9 @@ Parameters Input example:
     robot.evaluate_error(position_no_error, position_with_error)
     #Return the error between two positions
 
+    robot.get_euler_angles(rotation_matrix)
+    #Convert a rotation matrix to Euler angles
+
      #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#
      
     robot.plot_mechanism(variable_values, title= 'Your Title', initial_config=False)
@@ -229,6 +232,25 @@ class Mechanism:
         #Evaluate real error position
         error = np.linalg.norm(position_no_error - position_with_error)
         return error
+
+    def get_euler_angles(self, rotation_matrix):
+        """Convert a rotation matrix to Euler angles."""
+        assert rotation_matrix.shape == (3, 3), "Rotation matrix must be 3x3"
+        
+        sy = sp.sqrt(rotation_matrix[0, 0] ** 2 + rotation_matrix[1, 0] ** 2)
+        
+        singular = sy < 1e-6
+        
+        if singular:
+            x = sp.atan2(-rotation_matrix[1, 2], rotation_matrix[1, 1])
+            y = sp.atan2(-rotation_matrix[2, 0], sy)
+            z = 0
+        else:
+            x = sp.atan2(rotation_matrix[2, 1], rotation_matrix[2, 2])
+            y = sp.atan2(-rotation_matrix[2, 0], sy)
+            z = sp.atan2(rotation_matrix[1, 0], rotation_matrix[0, 0])
+        
+        return x, y, z
 
     def plot_mechanism(self, variable_values=None, title=None, initial_config=False, plot_type='3d'):
         """Plot the mechanism in 2D or 3D based on user choice with optional variable values."""
