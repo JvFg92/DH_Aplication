@@ -198,7 +198,7 @@ Error = 0.3794356098314992 mm
 
 ## **Ângulos de Euler / *Euler Anlges*:**
 
-Yaw(X),Pitch(Y),Roll(Z)
+  Yaw (X),  Pitch (Y),  Roll (Z)
 -  Without errors:  $(\pi/2, -1.30899693899575, 0.500000000000000)$
 
 -  With errors:  $(-1.56688051629514 + \pi, -1.32899609966771, 0.498498303670928)$
