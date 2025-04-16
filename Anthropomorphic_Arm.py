@@ -51,7 +51,7 @@ if __name__ == "__main__":
     """Begin the calculations numerically:"""
 
     #Calculate the forward kinematics without errors DH parameters applied:
-    matrix_g_numerical, position_g_numerical, orientation_g_numerical = robot.evaluate_param(matrix_g)
+    matrix_g_numerical, position_g_numerical, orientation_g_numerical = robot.evaluate_param()
     print("\nMatrix and position numerical without errors:(Book Validation)\n")
     
     #Validating the matrix:
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     print("\nOrientation:\n", orientation_g_numerical)
 
     #Calculate the forward kinematics with errors DH parameters applied:
-    matrix_g_numerical_e, position_g_numerical_e, orientation_g_numerical_e = robot.evaluate_param( apply_errors=True)
+    matrix_g_numerical_e, position_g_numerical_e, orientation_g_numerical_e = robot.evaluate_param(apply_errors=True)
     print("\nMatrix and position numerical with errors:\n")
     print("Matrix:\n", matrix_g_numerical_e)
     print("\nPosition:\n", position_g_numerical_e)

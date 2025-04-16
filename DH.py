@@ -91,8 +91,6 @@ class Mechanism:
                 self.theta.append(sp.Symbol(f'theta_{i}'))
             self.d.append(sp.Symbol(f'd_{i}'))
         
-        Matrix_al = sp.eye(4)  
-        Matrix_al_e = sp.eye(4)
         Matrix = sp.eye(4)  
         Matrix_e = sp.eye(4)
 
@@ -143,10 +141,9 @@ class Mechanism:
         """Return the numerical transformation matrix and position."""
         #Check if T is a valid matrix
         if (T is None) or (not isinstance(T, sp.Matrix)):
-            if(apply_errors):
-                T=self.Matrix_al_e
-            else:
-                T=self.Matrix_al
+            T,pos=self.forward_kinematics(apply_errors)
+           
+               
 
         #Build a dictionary with the parameters
         subs_dict = {}
