@@ -199,9 +199,9 @@ Error = 0.3794356098314992 mm
 ## **Ângulos de Euler / *Euler Anlges*:**
 
   Yaw (X),  Pitch (Y),  Roll (Z)
--  Without errors:  $(\pi/2, -1.30899693899575, 0.500000000000000)$
+-  Without errors:  $(1.5707963267948966, -1.30899693899575, 0.500000000000000)$
 
--  With errors:  $(-1.56688051629514 + \pi, -1.32899609966771, 0.498498303670928)$
+-  With errors:  $(1.57471213729465, -1.32899609966771, 0.498498303670928)$
 
 ### Referência usada / Reference used: 
 [Robotics: Modelling, Planning and Control; Sciavicco, et al. 2009](https://link.springer.com/book/10.1007/978-1-84628-642-1)
