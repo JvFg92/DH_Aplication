@@ -90,6 +90,11 @@ class Mechanism:
             elif params['type'] == 'prismatic':
                 self.theta.append(sp.Symbol(f'theta_{i}'))
             self.d.append(sp.Symbol(f'd_{i}'))
+        
+        Matrix_al = sp.eye(4)  
+        Matrix_al_e = sp.eye(4)
+        Matrix = sp.eye(4)  
+        Matrix_e = sp.eye(4)
 
     def dh_matrix(self,i,apply_errors=False):
       """Return the symbolic homogeneous matrix. Internal Use"""
@@ -128,10 +133,20 @@ class Mechanism:
             print("\n")
             """
         position = T[:3, 3]
+        if(apply_errors): 
+            self.Matrix_al_e = T
+        else: 
+            self.Matrix_al = T
         return T, position
     
-    def evaluate_param(self, T, variable_values=None, apply_errors=False):
+    def evaluate_param(self, T=None, variable_values=None, apply_errors=False):
         """Return the numerical transformation matrix and position."""
+        #Check if T is a valid matrix
+        if (T is None) or (not isinstance(T, sp.Matrix)):
+            if(apply_errors):
+                T=self.Matrix_al_e
+            else:
+                T=self.Matrix_al
 
         #Build a dictionary with the parameters
         subs_dict = {}
@@ -195,9 +210,15 @@ class Mechanism:
             T_numerica_eval = np.array(T_numerica, dtype=float)
             position_eval = T_numerica_eval[:3, 3]
             orientation_eval = T_numerica_eval[:3, :3]
+
+            if(apply_errors==True):
+                self.Matrix_e = T_numerica_eval
+            else: 
+                self.Matrix = T_numerica_eval
+            
             return T_numerica_eval, position_eval, orientation_eval
-        else:
-            return T_numerica, T_numerica[:3, 3], T_numerica[:3, :3]  # Return symbolic matrix, position and orientation
+        else: #Return symbolic matrix, position and orientation
+            return T_numerica, T_numerica[:3, 3], T_numerica[:3, :3]  
     
     def get_joint_positions(self, variable_values, apply_errors=False):
         """Return the joint positions for the mechanism in 3D. Internal Use"""
@@ -217,40 +238,78 @@ class Mechanism:
             print("Aviso: Posições contêm símbolos não substituídos:", positions)
             raise TypeError("Todos os símbolos devem ser substituídos por valores numéricos para plotagem")
     
-    def evaluate_error(self, pos_no_error, pos_with_error):
-        """Return the error between two positions in 3D."""
+    def evaluate_error(self, pos_no_error=None, pos_with_error=None):
+        """Return the error between two 3D positions, including component-wise errors and norm."""
+        
+        # Ensure matrices are initialized
+        if pos_no_error is None:
+            if not hasattr(self, 'Matrix') or self.Matrix is None:
+                raise ValueError("Nominal matrix not computed. Call evaluate_param with apply_errors=False first.")
+            pos_no_error = self.Matrix[:3, 3]
+        if pos_with_error is None:
+            if not hasattr(self, 'Matrix_e') or self.Matrix_e is None:
+                raise ValueError("Error matrix not computed. Call evaluate_param with apply_errors=True first.")
+            pos_with_error = self.Matrix_e[:3, 3]
+        
+        # Validate input types and convert to numpy arrays
         try:
-            position_no_error = np.array([float(coord) for coord in pos_no_error])
-            position_with_error = np.array([float(coord) for coord in pos_with_error])
+            pos_no_error = np.array(pos_no_error, dtype=float).reshape(3)
+            pos_with_error = np.array(pos_with_error, dtype=float).reshape(3)
         except (TypeError, ValueError) as e:
-            raise ValueError("As posições devem ser vetores 3D com valores numéricos") from e
+            raise ValueError("Positions must be 3D vectors with numerical values. Ensure all symbols are substituted.") from e
+        
+        # Verify 3D vectors
+        if pos_no_error.shape != (3,) or pos_with_error.shape != (3,):
+            raise ValueError("Positions must be 3D vectors (x, y, z)")
+        
+        # Compute error vector and norm
+        error_vector = pos_with_error - pos_no_error
+        error_norm = np.linalg.norm(error_vector)
+        
+        # Return dictionary with detailed error information
+        return error_norm
+        
+        
 
-        #Verify if the vectors have the correct size
-        if len(position_no_error) != 3 or len(position_with_error) != 3:
-            raise ValueError("As posições devem ser vetores 3D (x, y, z)")
+    def get_euler_angles(self, apply_errors=False):
+        """Convert a rotation matrix to Euler angles (ZYX convention) in radians."""
+        #Safeguard for matrix initialization
+        if apply_errors and not hasattr(self, 'Matrix_e'):
+            raise ValueError("Error matrix not computed. Call evaluate_param with apply_errors=True first.")
+        if not apply_errors and not hasattr(self, 'Matrix'):
+            raise ValueError("Nominal matrix not computed. Call evaluate_param with apply_errors=False first.")
 
-        #Evaluate real error position
-        error = np.linalg.norm(position_no_error - position_with_error)
-        return error
+        #Select rotation matrix
+        rotation_matrix = self.Matrix_e[:3,:3] if apply_errors else self.Matrix[:3, :3]
 
-    def get_euler_angles(self, rotation_matrix):
-        """Convert a rotation matrix to Euler angles."""
+        #Convert to numpy array and ensure 3x3
+        rotation_matrix = np.array(rotation_matrix, dtype=np.float64)
         assert rotation_matrix.shape == (3, 3), "Rotation matrix must be 3x3"
-        
-        sy = sp.sqrt(rotation_matrix[0, 0] ** 2 + rotation_matrix[1, 0] ** 2)
-        
+
+        #Validate orthogonality and determinant
+        if not np.allclose(np.dot(rotation_matrix.T, rotation_matrix), np.eye(3), atol=1e-6):
+            print("Warning: Rotation matrix is not orthogonal")
+        if not np.allclose(np.linalg.det(rotation_matrix), 1.0, atol=1e-6):
+            print("Warning: Rotation matrix determinant is not 1")
+
+        #Compute Euler angles (ZYX convention)
+        sy = np.sqrt(rotation_matrix[0, 0]**2 + rotation_matrix[1, 0]**2)
         singular = sy < 1e-6
-        
-        if singular:
-            x = sp.atan2(-rotation_matrix[1, 2], rotation_matrix[1, 1])
-            y = sp.atan2(-rotation_matrix[2, 0], sy)
-            z = 0
+
+        if not singular:
+            x = np.arctan2(rotation_matrix[2, 1], rotation_matrix[2, 2])
+            y = np.arctan2(-rotation_matrix[2, 0], sy)
+            z = np.arctan2(rotation_matrix[1, 0], rotation_matrix[0, 0])
         else:
-            x = sp.atan2(rotation_matrix[2, 1], rotation_matrix[2, 2])
-            y = sp.atan2(-rotation_matrix[2, 0], sy)
-            z = sp.atan2(rotation_matrix[1, 0], rotation_matrix[0, 0])
-        
-        return x, y, z
+            x = np.arctan2(-rotation_matrix[1, 2], rotation_matrix[1, 1])
+            y = np.arctan2(-rotation_matrix[2, 0], sy)
+            z = 0
+
+        # Debug output
+        #print(f"Debugging: Rotation matrix {'with errors' if apply_errors else 'without errors'}:\n", rotation_matrix)
+        #print(f"Euler angles (radians): x={x}, y={y}, z={z}")
+
+        return x, y, z  # Return angles in radians
 
     def plot_mechanism(self, variable_values=None, title=None, initial_config=False, plot_type='3d'):
         """Plot the mechanism in 2D or 3D based on user choice with optional variable values."""

@@ -5,13 +5,13 @@ if __name__ == "__main__":
     
     #Define the DH parameters:(exempli gratia: Anthropomorphic Arm)
     Anthropomorphic_Arm  = [
-        {'type': 'revolute',  'alpha': sp.pi/2, 'd': 0.0,
+        {'type': 'revolute',  'alpha': sp.pi/2, 'd': 0,
          'errors': {'sigma': 0.01, 'epsilon': 0.02, 'beta': 0.0003, 'phi': 0.001,}},
 
         {'type': 'revolute',  'alpha': 0, 'd': 0, 
          'errors': {'sigma': 0.05, 'epsilon': 0.04, 'beta': 0.0006, 'phi': 0.005,}},
 
-        {'type': 'revolute', 'a':1, 'alpha': 0, 'd': 0, 
+        {'type': 'revolute', 'alpha': 0, 'd': 0, 
          'errors': {'sigma': 0.1, 'epsilon': 0.06, 'beta': 0.0009, 'phi': 0.015,}}
     ]
 
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     print("\nOrientation:\n", orientation_g_numerical)
 
     #Calculate the forward kinematics with errors DH parameters applied:
-    matrix_g_numerical_e, position_g_numerical_e, orientation_g_numerical_e = robot.evaluate_param(matrix_g_e, apply_errors=True)
+    matrix_g_numerical_e, position_g_numerical_e, orientation_g_numerical_e = robot.evaluate_param( apply_errors=True)
     print("\nMatrix and position numerical with errors:\n")
     print("Matrix:\n", matrix_g_numerical_e)
     print("\nPosition:\n", position_g_numerical_e)
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     """Start calculations numerically with optional variable values ​​(graphical example):"""
 
     #Calculate the forward kinematics without errors DH parameters applied:
-    matrix_numerical, position_numerical, orientation_numerical = robot.evaluate_param(matrix_g,variable_values)
+    matrix_numerical, position_numerical, orientation_numerical = robot.evaluate_param(matrix_g, variable_values)
     print("\nMatrix and position numerical without errors:\n")
     print("\nMatrix:\n", matrix_numerical)
     print("\nPosition:\n", position_numerical)
@@ -90,13 +90,13 @@ if __name__ == "__main__":
     print("\n [X, Y, Z] position values:")
     print("Position without erros: \n", [p for p in position_numerical])
     print("Position with errors: \n", [p for p in position_numerical_e])
-    error=robot.evaluate_error(position_numerical, position_numerical_e)
+    error=robot.evaluate_error()
     print("\n Error value: \n", error)
 
     #Calculate the euler angles:
     print("\nEuler angles:Yaw(X),Pitch(Y),Roll(Z)")
-    print("Without errors: \n", robot.get_euler_angles(orientation_numerical))
-    print("With errors: \n", robot.get_euler_angles(orientation_numerical_e))
+    print("Without errors: \n", robot.get_euler_angles())
+    print("With errors: \n", robot.get_euler_angles(True))
         
     #Plot the robot:
     #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#

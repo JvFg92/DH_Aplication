@@ -99,13 +99,13 @@ if __name__ == "__main__":
     print("\n [X, Y, Z] position values:")
     print("Position without erros: \n", [p for p in position_numerical])
     print("Position with errors: \n", [p for p in position_numerical_e])
-    error=robot.evaluate_error(position_numerical, position_numerical_e)
+    error=robot.evaluate_error()
     print("\n Error value in mm: \n", error)
 
     #Calculate the euler angles:
     print("\nEuler angles:Yaw(X),Pitch(Y),Roll(Z)")
-    print("Without errors: \n", robot.get_euler_angles(orientation_numerical))
-    print("With errors: \n", robot.get_euler_angles(orientation_numerical_e))
+    print("Without errors: \n", robot.get_euler_angles())
+    print("With errors: \n", robot.get_euler_angles(apply_errors=True))
         
     #Plot the robot:
     #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#
