@@ -52,7 +52,7 @@ Parameters Input example:
     robot.evaluate_error(position_no_error, position_with_error)
     #Return the error between two positions
 
-    robot.get_euler_angles(rotation_matrix)
+    robot.get_euler_angles(apply_error)
     #Convert a rotation matrix to Euler angles
 
      #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#
@@ -268,8 +268,6 @@ class Mechanism:
         
         # Return dictionary with detailed error information
         return error_norm
-        
-        
 
     def get_euler_angles(self, apply_errors=False):
         """Convert a rotation matrix to Euler angles (ZYX convention) in radians."""
