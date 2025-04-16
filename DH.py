@@ -239,9 +239,9 @@ class Mechanism:
             raise TypeError("Todos os símbolos devem ser substituídos por valores numéricos para plotagem")
     
     def evaluate_error(self, pos_no_error=None, pos_with_error=None):
-        """Return the error between two 3D positions, including component-wise errors and norm."""
+        """Return the error between two 3D positions."""
         
-        # Ensure matrices are initialized
+        #Ensure matrices are initialized
         if pos_no_error is None:
             if not hasattr(self, 'Matrix') or self.Matrix is None:
                 raise ValueError("Nominal matrix not computed. Call evaluate_param with apply_errors=False first.")
@@ -251,22 +251,21 @@ class Mechanism:
                 raise ValueError("Error matrix not computed. Call evaluate_param with apply_errors=True first.")
             pos_with_error = self.Matrix_e[:3, 3]
         
-        # Validate input types and convert to numpy arrays
+        #Validate input types and convert to numpy arrays
         try:
             pos_no_error = np.array(pos_no_error, dtype=float).reshape(3)
             pos_with_error = np.array(pos_with_error, dtype=float).reshape(3)
         except (TypeError, ValueError) as e:
             raise ValueError("Positions must be 3D vectors with numerical values. Ensure all symbols are substituted.") from e
         
-        # Verify 3D vectors
+        #Verify 3D vectors
         if pos_no_error.shape != (3,) or pos_with_error.shape != (3,):
             raise ValueError("Positions must be 3D vectors (x, y, z)")
         
-        # Compute error vector and norm
-        error_vector = pos_with_error - pos_no_error
-        error_norm = np.linalg.norm(error_vector)
+        #Compute error vector and norm
+        error_norm = np.linalg.norm(pos_with_error - pos_no_error)
         
-        # Return dictionary with detailed error information
+        #Return dictionary with detailed error information
         return error_norm
 
     def get_euler_angles(self, apply_errors=False):
