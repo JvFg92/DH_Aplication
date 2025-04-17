@@ -143,8 +143,6 @@ class Mechanism:
         if (T is None) or (not isinstance(T, sp.Matrix)):
             T,pos=self.forward_kinematics(apply_errors)
            
-               
-
         #Build a dictionary with the parameters
         subs_dict = {}
         for i, params in enumerate(self.param):
@@ -203,7 +201,7 @@ class Mechanism:
         
         #Substitute values into the transformation matrix
         T_numerica = T.subs(subs_dict)
-        if(variable_values):
+        if(variable_values is not None):
             T_numerica_eval = np.array(T_numerica, dtype=float)
             position_eval = T_numerica_eval[:3, 3]
             orientation_eval = T_numerica_eval[:3, :3]

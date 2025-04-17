@@ -73,7 +73,7 @@ if __name__ == "__main__":
     """Start calculations numerically with optional variable values ​​(graphical example):"""
 
     #Calculate the forward kinematics without errors DH parameters applied:
-    matrix_numerical, position_numerical, orientation_numerical = robot.evaluate_param(matrix_g, variable_values)
+    matrix_numerical, position_numerical, orientation_numerical = robot.evaluate_param(matrix_g,variable_values)
     print("\nMatrix and position numerical without errors:\n")
     print("\nMatrix:\n", matrix_numerical)
     print("\nPosition:\n", position_numerical)
