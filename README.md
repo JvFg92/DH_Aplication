@@ -1,64 +1,69 @@
-# Desenvolvimento do método Denavit-Hartenberg em Python, em um projeto de análise dimensional e de erros em robôs manipuladores!
+# 🤖 Denavit-Hartenberg Method in Python for Manipulator Robot Analysis 🐍
 
-Desenvolvimento:
-- DH.py:
-  - Cálculo da cinemática direta (com e sem erros de geometria aplicados às juntas) algebricamente e numericamente;
-  - Cálculo de erro de trajetória;
-  - Definição das coordenadas e orientação do efetuador final;
-  - Definição dos ângulos de Euler para orientação;
-  - Plotagem gráfica do mecanismo após movimentação das juntas;
+A project focused on dimensional and error analysis in manipulator robots using the Denavit-Hartenberg (DH) method implemented in Python.
 
-- Anthropomorphic_Arm.py:
-  - Arquivo contendo a validação do método, descrita em sequência;
+⚙️ Development Files
+- `DH.py`:
+*Calculates direct kinematics (with and without geometric errors applied to joints) algebraically and numerically.
+*Computes trajectory error.
+*Defines end-effector coordinates and orientation.
+*Determines Euler angles for orientation.
+*Generates graphical plots of the mechanism after joint movement.
 
-- Spherical_Arm.py:
-  - Arquivo contendo validação secundária com um braço esférico;
+- `Anthropomorphic_Arm.py`:
+*Contains the primary validation of the DH method.
 
-- Three-link_planar_arm.py:
-  - Arquivo contendo o a utilização do método em um elo modelo para pesquisa.
+- `Spherical_Arm.py`:
+*Provides secondary validation using a spherical arm model.
 
-O desenvolvimento do método foi validado utilizando um braço antropomórfico com 3 juntas cilíndricas (Imagem 1 - Braço Antropomórfico), onde a cinemática direta coincidiu com o esperado na bibliografia (Resultados)!
+- `Three-link_planar_arm.py`:
+*Demonstrates the application of the DH method to a three-link planar arm model for research purposes.
 
-*Nota: Novas adições podem acontecer de acordo com a necessidade de uso.
+The development of this method was validated using an anthropomorphic arm with 3 cylindrical joints (see Image 1: Anthropomorphic Arm). The direct kinematics results align with established bibliography (see Results section). ✅
 
-### **PT/EN:** 
-# Development of the Denavit-Hartenberg method in Python, in a project of dimensional and error analysis in manipulator robots!
+📝 Note: This project may receive further updates and additions as needed.
 
-Development:
-- DH.py:
-  - Calculation of direct kinematics (with and without geometry errors applied to the joints) algebraically and numerically;
-  - Trajectory error calculation;
-  - Definition of end effector coordinates and orientation;
-  - Definition of Euler angles for orientation;
-  - Graphical plotting of the mechanism after joint movement;
+### **🇬🇧 EN / 🇧🇷 PT :** 
+# 🇧🇷 Desenvolvimento do método Denavit-Hartenberg em Python, em um projeto de análise dimensional e de erros em robôs manipuladores!
 
-- Anthropomorphic_Arm.py:
-  - File containing the validation of the method, described in sequence;
+Um projeto focado na análise dimensional e de erros em robôs manipuladores utilizando o método Denavit-Hartenberg (DH) implementado em Python.
 
-- Spherical_Arm.py:
-  - File containing secondary validation with a spherical arm;
+⚙️ Arquivos de Desenvolvimento
+- `DH.py`:
+*Calcula a cinemática direta (com e sem erros geométricos aplicados às juntas) algebricamente e numericamente.
+*Calcula o erro de trajetória.
+*Define as coordenadas e a orientação do efetor final.
+*Determina ângulos de Euler para orientação.
+*Gera gráficos do mecanismo após o movimento da junta.
 
-- Three-link_planar_arm.py:
-  - File containing the use of the method in a model link for research.
- 
-The development of the method was validated using an anthropomorphic arm with 3 cylindrical joints (Image 1 - Anthropomorphic Arm), where the direct kinematics coincided with what was expected in the bibliography (Results)!
+- `Anthropomorphic_Arm.py`:
+*Contém a validação primária do método DH.
 
-*Note: New additions may occur according to usage needs.
+- `Spherical_Arm.py`:
+*Fornece validação secundária utilizando um modelo de braço esférico.
+
+- `Three-link_planar_arm.py`:
+*Demonstra a aplicação do método DH a um modelo de braço plano de três elos para fins de pesquisa.
+
+O desenvolvimento deste método foi validado utilizando um braço antropomórfico com 3 juntas cilíndricas (ver Imagem 1: Braço Antropomórfico). Os resultados da cinemática direta estão alinhados com a bibliografia estabelecida (ver seção Resultados). ✅
+
+📝 Observação: Este projeto pode receber atualizações e adições conforme necessário.
+Enviar feedback
+Resultados de tradução disponíveis
 
 
-## **Antropomorphic Arm**
+
+## 💪**Antropomorphic Arm**
 
 ![image](https://github.com/user-attachments/assets/fb2276c0-c112-48a9-955f-f4f296786b1b)
 
-Disponível em / *Avaliable at*: [Robotics: Modelling, Planning and Control; Sciavicco, et al. 2009](https://link.springer.com/book/10.1007/978-1-84628-642-1)
+*Avaliable at*: [Robotics: Modelling, Planning and Control; Sciavicco, et al. 2009](https://link.springer.com/book/10.1007/978-1-84628-642-1)
 
 
-## *Resultados / Results:
+## 📊 *Resultados / Results:
 
-**Bibliografia / bibliography:**
+📚 **Bibliografia / bibliography:**
 Parâmetros Denavit-Hartenberg base:
-
-
 
 $$
 T = \begin{bmatrix}
@@ -69,84 +74,7 @@ T = \begin{bmatrix}
 \end{bmatrix}
 $$
 
-Essa matriz usa a forma simplificada.
-
-*This matrix uses the simplified form.*
-
-**Gerada pelo código / Generated by code:**
-
-$$
-T' = \begin{bmatrix}
--\sin(\theta_1)\sin(\theta_2)\cos(\theta_0) + \cos(\theta_0)\cos(\theta_1)\cos(\theta_2) & -\sin(\theta_1)\cos(\theta_0)\cos(\theta_2) - \sin(\theta_2)\cos(\theta_0)\cos(\theta_1) & \sin(\theta_0) & a_1\cos(\theta_0)\cos(\theta_1) - a_2\sin(\theta_1)\sin(\theta_2)\cos(\theta_0) + a_2\cos(\theta_0)\cos(\theta_1)\cos(\theta_2) \\
--\sin(\theta_0)\sin(\theta_1)\sin(\theta_2) + \sin(\theta_0)\cos(\theta_1)\cos(\theta_2) & -\sin(\theta_0)\sin(\theta_1)\cos(\theta_2) - \sin(\theta_0)\sin(\theta_2)\cos(\theta_1) & -\cos(\theta_0) & a_1\sin(\theta_0)\cos(\theta_1) - a_2\sin(\theta_0)\sin(\theta_1)\sin(\theta_2) + a_2\sin(\theta_0)\cos(\theta_1)\cos(\theta_2) \\
-\sin(\theta_1)\cos(\theta_2) + \sin(\theta_2)\cos(\theta_1) & -\sin(\theta_1)\sin(\theta_2) + \cos(\theta_1)\cos(\theta_2) & 0 & a_1\sin(\theta_1) + a_2\sin(\theta_1)\cos(\theta_2) + a_2\sin(\theta_2)\cos(\theta_1) \\
-0 & 0 & 0 & 1
-\end{bmatrix}
-$$
-
-Essa matriz apresenta os termos trigonométricos expandidos, mas é matematicamente equivalente à matriz calculada manualmente após simplificação.
-
-*This matrix has the expanded trigonometric terms, but is mathematically equivalent to the manually calculated matrix after simplification.*
-
-### Simplificação do resultado / *Result simplification*:
-
-- **T'(0,0):** $$\(-sin(\theta_1)sin(\theta_2)cos(\theta_0) + cos(\theta_0)cos(\theta_1)cos(\theta_2)\)$$  
-  = $$\( cos(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)$$  
-  = $$\( cos(\theta_0)cos(\theta_1 + \theta_2) \)$$
-  
-- **T'(0,1):** $$\(-sin(\theta_1)cos(\theta_0)cos(\theta_2) - sin(\theta_2)cos(\theta_0)cos(\theta_1)\)$$  
-  = $$\( -cos(\theta_0) [sin(\theta_1)cos(\theta_2) + cos(\theta_1)sin(\theta_2)] \)$$  
-  = $$\( -cos(\theta_0)sin(\theta_1 + \theta_2) \)$$
-
-- **T'(0,3):** $$\( a_1cos(\theta_0)cos(\theta_1) - a_2sin(\theta_1)sin(\theta_2)cos(\theta_0) + a_2cos(\theta_0)cos(\theta_1)cos(\theta_2) \)$$  
-  = $$\( a_1cos(\theta_0)cos(\theta_1) + a_2cos(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)$$  
-  = $$\( a_1cos(\theta_0)cos(\theta_1) + a_2cos(\theta_0)cos(\theta_1 + \theta_2) \)$$
-
-- **T'(1,0):** $$\(-sin(\theta_0)sin(\theta_1)sin(\theta_2) + sin(\theta_0)cos(\theta_1)cos(\theta_2)\)$$  
-  = $$\( sin(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)$$  
-  = $$\( sin(\theta_0)cos(\theta_1 + \theta_2) \)$$
-
-- **T'(1,1):** $$\(-sin(\theta_0)sin(\theta_1)cos(\theta_2) - sin(\theta_0)sin(\theta_2)cos(\theta_1)\)$$  
-  = $$\( -sin(\theta_0) [sin(\theta_1)cos(\theta_2) + cos(\theta_1)sin(\theta_2)] \)$$  
-  = $$\( -sin(\theta_0)sin(\theta_1 + \theta_2) \)$$
-
-- **T'(1,3):** $$\( a_1sin(\theta_0)cos(\theta_1) - a_2sin(\theta_0)sin(\theta_1)sin(\theta_2) + a_2sin(\theta_0)cos(\theta_1)cos(\theta_2) \)$$  
-  = $$\( a_1sin(\theta_0)cos(\theta_1) + a_2sin(\theta_0) [cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2)] \)$$  
-  = $$\( a_1sin(\theta_0)cos(\theta_1) + a_2sin(\theta_0)cos(\theta_1 + \theta_2) \)$$
-
-- **T'(2,0):** $$\( sin(\theta_1)cos(\theta_2) + sin(\theta_2)cos(\theta_1) \)$$  
-  = $$\( sin(\theta_1 + \theta_2) \)$$
-
-- **T'(2,1):** $$\( -sin(\theta_1)sin(\theta_2) + cos(\theta_1)cos(\theta_2) \)$$  
-  = $$\( cos(\theta_1)cos(\theta_2) - sin(\theta_1)sin(\theta_2) \)$$  
-  = $$\( cos(\theta_1 + \theta_2) \)$$
-
-- **T'(2,3):** $$\( a_1sin(\theta_1) + a_2sin(\theta_1)cos(\theta_2) + a_2sin(\theta_2)cos(\theta_1) \)$$  
-  = $$\( a_1sin(\theta_1) + a_2 [sin(\theta_1)cos(\theta_2) + cos(\theta_1)sin(\theta_2)] \)$$  
-  = $$\( a_1sin(\theta_1) + a_2sin(\theta_1 + \theta_2) \)$$
-
-## **Matriz de erros / *Errors Matrix*:**
-
-$$
-T_e' = \begin{bmatrix}
-(-\sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) + \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \cos(\phi_2 + \theta_2) + ( \sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) - \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) ) \sin(\phi_2 + \theta_2) ) &
-(- ( -\sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) + \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\phi_2 + \theta_2) \cos(\alpha_2 + \beta_2) + ( \sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) - \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) ) \cos(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) + ( \sin(\alpha_0 + \beta_0) \sin(\phi_0 + \theta_0) \cos(\alpha_1 + \beta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_1 + \theta_1) \cos(\phi_0 + \theta_0) ) \sin(\alpha_2 + \beta_2) ) &
-( ( -\sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) + \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\alpha_2 + \beta_2) \sin(\phi_2 + \theta_2) - ( \sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) - \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) ) \sin(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) + ( \sin(\alpha_0 + \beta_0) \sin(\phi_0 + \theta_0) \cos(\alpha_1 + \beta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_1 + \theta_1) \cos(\phi_0 + \theta_0) ) \cos(\alpha_2 + \beta_2) ) &
-( (a_0 + \sigma_0) \cos(\phi_0 + \theta_0) - (a_1 + \sigma_1) \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) + (a_1 + \sigma_1) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + (a_2 + \sigma_2) ( -\sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) + \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \cos(\phi_2 + \theta_2) + (a_2 + \sigma_2) ( \sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) - \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) ) \sin(\phi_2 + \theta_2) + (d_1 + \epsilon_1) \sin(\alpha_0 + \beta_0) \sin(\phi_0 + \theta_0) + (d_2 + \epsilon_2) ( \sin(\alpha_0 + \beta_0) \sin(\phi_0 + \theta_0) \cos(\alpha_1 + \beta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \cos(\alpha_0 + \beta_0) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \sin(\phi_1 + \theta_1) \cos(\phi_0 + \theta_0) ) ) \\
-( ( \sin(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) ) \cos(\phi_2 + \theta_2) + ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\phi_2 + \theta_2) ) &
-( - ( \sin(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) ) \sin(\phi_2 + \theta_2) \cos(\alpha_2 + \beta_2) + ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \cos(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) + ( -\sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) - \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\alpha_2 + \beta_2) ) &
-( ( \sin(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) ) \sin(\alpha_2 + \beta_2) \sin(\phi_2 + \theta_2) - ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) + ( -\sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) - \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \cos(\alpha_2 + \beta_2) ) &
-( (a_0 + \sigma_0) \sin(\phi_0 + \theta_0) + (a_1 + \sigma_1) \sin(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + (a_1 + \sigma_1) \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) + (a_2 + \sigma_2) ( \sin(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) + \sin(\phi_1 + \theta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) ) \cos(\phi_2 + \theta_2) + (a_2 + \sigma_2) ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) - \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) \cos(\alpha_1 + \beta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) \sin(\phi_2 + \theta_2) - (d_1 + \epsilon_1) \sin(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) + (d_2 + \epsilon_2) ( -\sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_0 + \theta_0) + \sin(\alpha_1 + \beta_1) \sin(\phi_0 + \theta_0) \sin(\phi_1 + \theta_1) - \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) \cos(\phi_0 + \theta_0) \cos(\phi_1 + \theta_1) ) ) \\
-( ( \sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) ) \sin(\phi_2 + \theta_2) + \sin(\alpha_0 + \beta_0) \sin(\phi_1 + \theta_1) \cos(\phi_2 + \theta_2) ) &
-( ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) ) \sin(\alpha_2 + \beta_2) + ( \sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) ) \cos(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) - \sin(\alpha_0 + \beta_0) \sin(\phi_1 + \theta_1) \sin(\phi_2 + \theta_2) \cos(\alpha_2 + \beta_2) ) &
-( ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) ) \cos(\alpha_2 + \beta_2) - ( \sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) ) \sin(\alpha_2 + \beta_2) \cos(\phi_2 + \theta_2) + \sin(\alpha_0 + \beta_0) \sin(\alpha_2 + \beta_2) \sin(\phi_1 + \theta_1) \sin(\phi_2 + \theta_2) ) &
-( d_0 + \epsilon_0 + (a_1 + \sigma_1) \sin(\alpha_0 + \beta_0) \sin(\phi_1 + \theta_1) + (a_2 + \sigma_2) ( \sin(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \sin(\alpha_1 + \beta_1) \cos(\alpha_0 + \beta_0) ) \sin(\phi_2 + \theta_2) + (a_2 + \sigma_2) \sin(\alpha_0 + \beta_0) \sin(\phi_1 + \theta_1) \cos(\phi_2 + \theta_2) + (d_1 + \epsilon_1) \cos(\alpha_0 + \beta_0) + (d_2 + \epsilon_2) ( -\sin(\alpha_0 + \beta_0) \sin(\alpha_1 + \beta_1) \cos(\phi_1 + \theta_1) + \cos(\alpha_0 + \beta_0) \cos(\alpha_1 + \beta_1) ) ) \\
-0 & 0 & 0 & 1
-\end{bmatrix}
-$$
-
-
-## **Parâmetros utilizados / *Used Parameters*:**
+## **Used Parameters / *Parâmetros utilizados*:**
 
 | Joint (i) | θᵢ (rad) | dᵢ (mm)  | aᵢ (mm) | αᵢ (rad) |
 |-----------|---------:|--------:|-------:|---------:|
@@ -166,9 +94,9 @@ $$
 
 ![image](https://github.com/user-attachments/assets/903c9679-f460-4f5c-b5fe-55307f81f451)
 
-## **Matriz Transformação Cinemática / *Kinematic Transformation Matrix*:**
+## **Kinematic Transformation Matrix / *Matriz Transformação Cinemática*:**
 
-### **Sem erros / *withot errors*:**
+### **Withot errors / *Sem erros*:**
 
 $$
 A' = \begin{bmatrix}
@@ -180,7 +108,7 @@ A' = \begin{bmatrix}
 $$
 
 
-### **Com erros / *With errors*:**
+### ⚠️ **With errors / *Com erros*:**
 
 $$
 A'' = \begin{bmatrix}
@@ -192,19 +120,18 @@ A'' = \begin{bmatrix}
 $$
 
 
-
-## **Erro Modular Calculado / *Calculated Modular Error*:**
+## 📏**Calculated Modular Error / *Erro Modular Calculado*:**
 Error = 0.3794356098314992 mm
 
-## **Ângulos de Euler / *Euler Anlges*:**
+## 🧭**Euler Anlges / *Ângulos de Euler*:**
 
   Yaw (X),  Pitch (Y),  Roll (Z)
 -  Without errors:  $(1.5707963267948966, -1.30899693899575, 0.500000000000000)$
 
--  With errors:  $(1.57471213729465, -1.32899609966771, 0.498498303670928)$
+-  ⚠️ With errors:  $(1.57471213729465, -1.32899609966771, 0.498498303670928)$
 
-### Referência usada / Reference used: 
+### 🎓 Referência usada / Reference used: 
 [Robotics: Modelling, Planning and Control; Sciavicco, et al. 2009](https://link.springer.com/book/10.1007/978-1-84628-642-1)
 
-* O acesso ao material é provido pela Universidade Federal de Santa Catarina (UFSC)
-* *The access is provided by Federal University of Santa Catarina (UFSC)*
+* 🇧🇷 O acesso ao material é provido pela Universidade Federal de Santa Catarina (UFSC)
+* 🇬🇧  The access is provided by Federal University of Santa Catarina (UFSC)
