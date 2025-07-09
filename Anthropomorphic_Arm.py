@@ -5,14 +5,14 @@ if __name__ == "__main__":
     
     #Define the DH parameters:(exempli gratia: Anthropomorphic Arm)
     Anthropomorphic_Arm  = [
-        {'type': 'revolute',  'alpha': sp.pi/2, 'd': 0,
-         'errors': {'sigma': 0.01, 'epsilon': 0.02, 'beta': 0.0003, 'phi': 0.001,}},
+        {'type': 'revolute', 'a': 0, 'alpha': sp.pi/2, 'd': 0,
+         'errors': {'sigma': 1.02469 , 'epsilon': 0.3606, 'beta': 0.0181, 'phi': 0,}},
 
-        {'type': 'revolute',  'alpha': 0, 'd': 0, 
-         'errors': {'sigma': 0.05, 'epsilon': 0.04, 'beta': 0.0006, 'phi': 0.005,}},
+        {'type': 'revolute',  'a': 80, 'alpha': 0, 'd': 0, 
+         'errors': {'sigma': 1.02469, 'epsilon': 0.3606, 'beta': 0.0181, 'phi': 0}},
 
-        {'type': 'revolute', 'alpha': 0, 'd': 0, 
-         'errors': {'sigma': 0.1, 'epsilon': 0.06, 'beta': 0.0009, 'phi': 0.015,}}
+        {'type': 'revolute', 'a': 60, 'alpha': 0, 'd': 0, 
+         'errors': {'sigma': 0.76852, 'epsilon': 0.3606, 'beta': 0.0181, 'phi': 0,}}
     ]
 
     #Create the robot:
@@ -22,13 +22,13 @@ if __name__ == "__main__":
     """To plot the robot, we need to provide the values of the variables. including other parameters that are not theta"""
     variable_values = {
     #Variables not provided (Defined in the DH parameters, for plot eg):
-    robot.a[0]:     5,
-    robot.a[1]:     10,
-    robot.a[2]:     15,
+    #robot.a[0]:     5,
+    #robot.a[1]:     10,
+    #robot.a[2]:     15,
     #Variables of movement:
-    robot.theta[0]: 0.5,        #theta_0 for the first cylindrical joint
-    robot.theta[1]: sp.pi/4,    #theta_1 for the second cylindrical joint   
-    robot.theta[2]: sp.pi/6,    #theta_2 for the third cylindrical joint
+    robot.theta[0]: sp.pi/12,   #theta_0 for the first cylindrical joint
+    robot.theta[1]: sp.pi/6,    #theta_1 for the second cylindrical joint   
+    robot.theta[2]: sp.pi/4,    #theta_2 for the third cylindrical joint
     }
 
     #robot.plot_mechanism(variable_values, title ='Mechanism kinematics without errors',initial_config=True)
