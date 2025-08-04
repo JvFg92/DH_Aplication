@@ -1,18 +1,18 @@
 import sympy as sp
 import DH 
-
+# 'errors': {'sigma': 1.02469 , 'epsilon': 0.3606, 'beta': 0.0181, 'phi': 0,}
 if __name__ == "__main__":
     
     #Define the DH parameters:(exempli gratia: Spherical Arm)
     Spherical_Arm = [
         {'type': 'revolute', 'a': 0, 'alpha': -sp.pi/2, 'd': 0.0,
-         'errors': {'phi': 0.05, 'epsilon': 0.02, 'sigma': 0.01, 'beta': 0.03}},
+         'errors': {'sigma': 1.02469 , 'epsilon': 0.3606, 'beta': 0.0181, 'phi': 0,}},
         
-        {'type': 'revolute', 'a':0, 'alpha': sp.pi/2,  'd': 1.0,
-         'errors': {'phi': 0.03, 'epsilon': 0.01, 'sigma': 0.02, 'beta': 0.02}},
+        {'type': 'revolute', 'a':0, 'alpha': sp.pi/2,  'd': 10,
+         'errors': {'sigma': 1.02469 , 'epsilon': 0.3606, 'beta': 0.0181, 'phi': 0,}},
 
         {'type': 'prismatic', 'a': 0, 'alpha': 0, 'theta': 0,
-         'errors': {'phi': 0.0, 'epsilon': 0.05, 'sigma': 0.0, 'beta': 0.0}}
+         'errors': {'sigma': 1.02469 , 'epsilon': 0.3606, 'beta': 0.0181, 'phi': 0,}}
     ]
 
     #Create the robot:
@@ -21,15 +21,14 @@ if __name__ == "__main__":
     #Evaluate the position of the effector using optional variable values:
     """To plot the robot, we need to provide the values of the variables. including other parameters that are not 'theta' or 'd'"""
     variable_values = {
-    #Variables not provided (Defined in the DH parameters, for plot eg):
     
     #Variables of movement:
-    robot.theta[0]: 0.5,    #theta_0 for the first cylindrical joint
-    robot.theta[1]: 1.0,    #theta_1 for the second cylindrical joint   
-    robot.d[2]:     2.0     #d_2 for the prismatic joint
+    robot.theta[0]: sp.pi/12,   #theta_0 for the first cylindrical joint
+    robot.theta[1]: sp.pi/6,    #theta_1 for the second cylindrical joint
+    robot.d[2]:     10,         #d_2 for the prismatic joint
     } 
     
-    #robot.plot_mechanism( title ='Manipulador em Estado Inicial',initial_config=True) 
+    #robot.plot_mechanism( title ='Manipulador em Estado Inicial',initial_config=True) #debugging purposes 
 
     """Begin the calculations algebrically"""
 
@@ -92,4 +91,4 @@ if __name__ == "__main__":
         
     #Plot the robot:
     #CERTIFY ALL THE VARIABLES ARE PROVIDED BEFORE PLOTTING#
-    robot.plot_mechanism(variable_values, title ='Robô 3R', plot_type= '3d')
+    robot.plot_mechanism(variable_values, title ='Cinematica do mecanismo com e sem erros', plot_type= '3d')
