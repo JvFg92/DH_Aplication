@@ -130,6 +130,7 @@ class Mechanism:
                     print(f"\n Element ({m},{n}):", A[m,n], end=" ")
             print("\n")
             """
+        T=sp.simplify(T)
         position = T[:3, 3]
         if(apply_errors): 
             self.Matrix_al_e = T
@@ -400,4 +401,113 @@ class Mechanism:
             ax.grid(True)
         
         ax.legend()
+        plt.show()
+
+    def plot_workspace(self, joint_ranges, fixed_values=None, num_samples=5000, apply_errors=False, title=None):
+        """
+        Plota o espaço de trabalho do mecanismo usando amostragem de Monte Carlo.
+        Busca os valores fixos diretamente dos parâmetros (DH) do robô.
+        
+        :param joint_ranges: Dicionário mapeando os símbolos das juntas móveis para tuplas (min_val, max_val).
+        :param fixed_values: (Opcional) Dicionário para adicionar ou sobrescrever valores estáticos.
+        :param num_samples: Número de pontos aleatórios para gerar o espaço de trabalho.
+        :param apply_errors: Booleano para aplicar ou não os erros ao espaço de trabalho.
+        :param title: Título do gráfico.
+        """
+        # 1. Obtém a cinemática direta simbólica
+        T, pos = self.forward_kinematics(apply_errors)
+        
+        # 2. Busca automaticamente os valores fixos da construção do robô (self.param)
+        subs_dict = {}
+        for i, params in enumerate(self.param):
+            if 'a' in params: subs_dict[self.a[i]] = params['a']
+            if 'alpha' in params: subs_dict[self.alpha[i]] = params['alpha']
+            if 'd' in params: subs_dict[self.d[i]] = params['d']
+            if 'theta' in params: subs_dict[self.theta[i]] = params['theta']
+            
+            # Trata offset para juntas prismáticas
+            if params.get('type') == 'prismatic' and 'theta_offset' in params:
+                subs_dict[self.theta[i]] = params['theta_offset']
+                
+            # Aplica ou zera os erros
+            if apply_errors and 'errors' in params:
+                errors = params['errors']
+                if 'phi' in errors: subs_dict[self.phi[i]] = errors['phi']
+                if 'epsilon' in errors: subs_dict[self.epsilon[i]] = errors['epsilon']
+                if 'sigma' in errors: subs_dict[self.sigma[i]] = errors['sigma']
+                if 'beta' in errors: subs_dict[self.beta[i]] = errors['beta']
+            else:
+                subs_dict[self.phi[i]] = 0
+                subs_dict[self.epsilon[i]] = 0
+                subs_dict[self.sigma[i]] = 0
+                subs_dict[self.beta[i]] = 0
+
+        # 3. Adiciona/sobrescreve com valores fixos adicionais caso fornecidos
+        if fixed_values:
+            subs_dict.update(fixed_values)
+            
+        # 4. Remove do subs_dict as juntas que vão variar (para mantê-las simbólicas na equação)
+        varying_symbols = list(joint_ranges.keys())
+        for sym in varying_symbols:
+            if sym in subs_dict:
+                del subs_dict[sym]
+                
+        if not varying_symbols:
+            raise ValueError("Forneça pelo menos uma junta móvel no dicionário 'joint_ranges'.")
+
+        # 5. Substitui os valores fixos no vetor de posição
+        pos_expr = pos.subs(subs_dict)
+
+        # 6. Converte as expressões simbólicas em funções rápidas do numpy
+        x_func = sp.lambdify(varying_symbols, pos_expr[0], modules='numpy')
+        y_func = sp.lambdify(varying_symbols, pos_expr[1], modules='numpy')
+        z_func = sp.lambdify(varying_symbols, pos_expr[2], modules='numpy')
+        
+        # 7. Gera amostras aleatórias uniformes para as juntas no range definido
+        random_inputs = []
+        for sym in varying_symbols:
+            min_val, max_val = joint_ranges[sym]
+            random_inputs.append(np.random.uniform(min_val, max_val, num_samples))
+            
+        # 8. Avalia os pontos
+        X = x_func(*random_inputs)
+        Y = y_func(*random_inputs)
+        Z = z_func(*random_inputs)
+        
+        # Converte constantes para arrays (caso algum eixo, como o Z em robôs planares, não mude)
+        if np.isscalar(X): X = np.full(num_samples, X)
+        if np.isscalar(Y): Y = np.full(num_samples, Y)
+        if np.isscalar(Z): Z = np.full(num_samples, Z)
+        
+        # 9. Plota o espaço de trabalho
+        fig = plt.figure(figsize=(10, 8))
+        ax = fig.add_subplot(111, projection='3d')
+        
+        # Cor varia em Z para robôs 3D, ou em Y para robôs planares
+        color_var = Z if np.ptp(Z) > 1e-5 else Y 
+        scatter = ax.scatter(X, Y, Z, c=color_var, cmap='viridis', s=2, alpha=0.6)
+        
+        cbar = fig.colorbar(scatter, ax=ax, pad=0.1, shrink=0.7)
+        cbar.set_label('Variação de Profundidade/Altura')
+        
+        ax.set_xlabel('X (mm)')
+        ax.set_ylabel('Y (mm)')
+        ax.set_zlabel('Z (mm)')
+        ax.set_title(title if title else 'Espaço de Trabalho do Mecanismo')
+        
+        # Ajusta os eixos proporcionalmente e evita quebra de limite em robôs planares (2D)
+        dx = X.max() - X.min()
+        dy = Y.max() - Y.min()
+        dz = Z.max() - Z.min()
+        max_range = max(dx, dy, dz) / 2.0
+        if max_range == 0: max_range = 10 # Prevenção de erro caso o range seja nulo
+        
+        mid_x = (X.max() + X.min()) * 0.5
+        mid_y = (Y.max() + Y.min()) * 0.5
+        mid_z = (Z.max() + Z.min()) * 0.5
+        
+        ax.set_xlim(mid_x - max_range, mid_x + max_range)
+        ax.set_ylim(mid_y - max_range, mid_y + max_range)
+        ax.set_zlim(mid_z - max_range, mid_z + max_range)
+        
         plt.show()
