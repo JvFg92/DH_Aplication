@@ -29,7 +29,7 @@ from scipy.optimize import minimize
 from typing import List, Dict, Optional, Tuple, Union
 
 class Mechanism:
-    """Classe responsável puramente pela modelagem algébrica e numérica do robô."""
+    """Class responsible for the symbolic representation of the robot using Denavit-Hartenberg parameters."""
     
     def __init__(self, param: List[Dict]):
         self.param = param
@@ -52,7 +52,7 @@ class Mechanism:
                                  self.phi + self.epsilon + self.sigma + self.beta)
 
     def dh_matrix(self, i: int, apply_errors: bool = False) -> sp.Matrix:
-        """Retorna a matriz de transformação homogênea simbólica de um único elo."""
+        """Returns the symbolic homogeneous transformation matrix for a single link."""
         a = self.a[i] + (self.sigma[i] if apply_errors else 0)
         alpha = self.alpha[i] + (self.beta[i] if apply_errors else 0)
         d = self.d[i] + (self.epsilon[i] if apply_errors else 0)
@@ -69,7 +69,7 @@ class Mechanism:
         ])
     
     def forward_kinematics(self, apply_errors: bool = False) -> Tuple[sp.Matrix, sp.Matrix]:
-        """Calcula a cinemática direta simbólica (Matriz T e Vetor Posição)."""
+        """Calculates the overall transformation matrix and the end-effector position."""
         T = sp.eye(4)
         for i in range(self.n_joints):
             T = T * self.dh_matrix(i, apply_errors)
@@ -78,64 +78,75 @@ class Mechanism:
         position = T[:3, 3]
         return T, position
 
-    def inverse_kinematics(self, target_position: List[float], initial_guess: Optional[Dict] = None, fixed_values: Optional[Dict] = None, apply_errors: bool = False, tolerance: float = 1e-6) -> Dict:
+    def inverse_kinematics(self, target_position: List[float], target_orientation_euler: Optional[Tuple[float, float, float]] = None, initial_guess: Optional[Dict] = None, fixed_values: Optional[Dict] = None, apply_errors: bool = False, tolerance: float = 1e-6) -> Dict:
         """
         Calcula a Cinemática Inversa numericamente usando otimização (SciPy).
-        Busca os valores das juntas que minimizam a distância até a posição alvo.
         
-        :param target_position: Lista ou array [x, y, z] com a posição alvo do efetuador.
-        :param initial_guess: Dicionário com o chute inicial para as juntas móveis. Ajuda a evitar singularidades.
-        :param fixed_values: Dicionário com os valores estáticos (se houver).
-        :param apply_errors: Booleano para aplicar ou não os erros DH ao cálculo.
-        :param tolerance: Tolerância de erro para aceitar a solução.
-        :return: Dicionário contendo os valores numéricos otimizados para as juntas móveis.
+        :param target_position: Lista [x, y, z] com a posição alvo.
+        :param target_orientation_euler: (Opcional) Tupla (rx, ry, rz) com os ângulos de Euler desejados em radianos.
+        :param initial_guess: Dicionário com o chute inicial para as juntas.
+        :param fixed_values: Dicionário com valores estáticos.
+        :param apply_errors: Booleano para aplicar erros DH.
+        :param tolerance: Tolerância de erro.
         """
-        # 1. Identificar as juntas variáveis (móveis)
         varying_symbols = []
         for i, params in enumerate(self.param):
             sym = self.d[i] if params.get('type') == 'prismatic' else self.theta[i]
             varying_symbols.append(sym)
 
-        # 2. Obter o vetor de posição simbólico da Cinemática Direta
-        _, pos_sym = self.forward_kinematics(apply_errors)
+        # Matriz T simbólica completa
+        T_sym, pos_sym = self.forward_kinematics(apply_errors)
+        rot_sym = T_sym[:3, :3] 
 
-        # 3. Construir o dicionário base com os parâmetros construtivos
         subs_dict = self._build_subs_dict(fixed_values, apply_errors)
-
-        # 4. Remover as variáveis móveis do dicionário para que permaneçam simbólicas
         for sym in varying_symbols:
-            if sym in subs_dict:
-                del subs_dict[sym]
+            if sym in subs_dict: del subs_dict[sym]
 
-        # 5. Substituir tudo o que é fixo na expressão de posição
         pos_expr = pos_sym.subs(subs_dict)
+        rot_expr = rot_sym.subs(subs_dict)
 
-        # 6. Converter as expressões simbólicas para funções numéricas Numpy (acelera a otimização)
+        # Funções numéricas para acelerar o solver
         pos_func_x = sp.lambdify(varying_symbols, pos_expr[0], modules='numpy')
         pos_func_y = sp.lambdify(varying_symbols, pos_expr[1], modules='numpy')
         pos_func_z = sp.lambdify(varying_symbols, pos_expr[2], modules='numpy')
+        rot_func = sp.lambdify(varying_symbols, rot_expr, modules='numpy')
 
-        target = np.array(target_position, dtype=float)
+        target_pos = np.array(target_position, dtype=float)
 
-        # 7. Função objetivo: Minimizar a distância Euclidiana ao quadrado
+        # Pré-calcular a matriz de rotação alvo a partir dos ângulos de Euler (ZYX)
+        if target_orientation_euler:
+            rx, ry, rz = target_orientation_euler
+            cx, sx = np.cos(rx), np.sin(rx)
+            cy, sy = np.cos(ry), np.sin(ry)
+            cz, sz = np.cos(rz), np.sin(rz)
+            
+            Rx = np.array([[1, 0, 0], [0, cx, -sx], [0, sx, cx]])
+            Ry = np.array([[cy, 0, sy], [0, 1, 0], [-sy, 0, cy]])
+            Rz = np.array([[cz, -sz, 0], [sz, cz, 0], [0, 0, 1]])
+            target_rot = Rz @ Ry @ Rx
+
         def objective(q):
+            # Erro de posição (Distância euclidiana ao quadrado)
             current_pos = np.array([pos_func_x(*q), pos_func_y(*q), pos_func_z(*q)])
-            error = current_pos - target
-            return np.sum(error**2)
+            pos_error = np.sum((current_pos - target_pos)**2)
+            
+            # Erro de orientação (Norma de Frobenius da diferença das matrizes)
+            if target_orientation_euler:
+                current_rot = np.array(rot_func(*q))
+                rot_error = np.sum((current_rot - target_rot)**2)
+                # O peso multiplica o erro de rotação para equilibrar a escala com os milímetros da posição
+                weight_rot = 10000.0 
+                return pos_error + (rot_error * weight_rot)
+            
+            return pos_error
 
-        # 8. Configurar o ponto de partida (chute inicial)
-        if initial_guess:
-            q0 = [initial_guess.get(sym, 0.0) for sym in varying_symbols]
-        else:
-            q0 = [0.1] * len(varying_symbols) # 0.1 para evitar singularidades comuns no ponto 0
+        q0 = [initial_guess.get(sym, 0.1) for sym in varying_symbols] if initial_guess else [0.1] * len(varying_symbols)
 
-        # 9. Otimização não linear (BFGS)
         result = minimize(objective, q0, method='BFGS', tol=tolerance)
 
-        if result.fun > 1e-3:
-            print(f"Aviso: A Cinemática Inversa pode não ter atingido o ponto exato. Erro residual: {np.sqrt(result.fun):.4f} mm")
+        if result.fun > 1e-2:
+            print(f"Aviso: Alvo não alcançado com perfeição. O robô pode não ter graus de liberdade suficientes para esta posição+orientação. Erro de função de custo: {result.fun:.4f}")
 
-        # 10. Mapear o resultado numérico de volta para os símbolos das juntas
         return {sym: float(val) for sym, val in zip(varying_symbols, result.x)}
     
     def _build_subs_dict(self, variable_values: Optional[Dict] = None, apply_errors: bool = False) -> Dict:
